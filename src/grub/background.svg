@@ -1,6 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
   <title>Lyra OS GRUB</title>
+  <defs>
+    <linearGradient id="aurora" x1="490" y1="245" x2="490" y2="835" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2AC7FD"/>
+      <stop offset="100%" stop-color="#BE49FD"/>
+    </linearGradient>
+    <linearGradient id="auroraGlow" gradientUnits="userSpaceOnUse" x1="-100" y1="-130" x2="950" y2="380">
+      <stop offset="0%" stop-color="#2AC7FD" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#BE49FD" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#BE49FD" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="auroraBlur" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="85"/>
+    </filter>
+  </defs>
   <rect width="1920" height="1080" fill="#0b1018"/>
+  <g opacity="0.14" filter="url(#auroraBlur)">
+    <ellipse cx="320" cy="110" rx="750" ry="320" fill="url(#auroraGlow)" transform="rotate(-9 320 110)"/>
+  </g>
   <path d="M0 0h610L398 212H0zm1920 1080h-630l215-215h415z" fill="#111925"/>
   <g fill="none" stroke="#26364c" opacity=".58">
     <path d="M0 154h460l180 180h430l180-180h670"/>
@@ -9,7 +26,7 @@
     <path d="M0 990h560l165-165h395l165 165h635"/>
   </g>
   <rect x="490" y="245" width="940" height="590" rx="18" fill="#111925" stroke="#26364c"/>
-  <rect x="490" y="245" width="6" height="590" rx="3" fill="#3b82f6"/>
+  <rect x="490" y="245" width="6" height="590" rx="3" fill="url(#aurora)"/>
   <g transform="translate(870 137)" fill="none" stroke="#e7edf6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
     <path d="M0 0v60c0 44 36 80 80 80s80-36 80-80V0"/>
     <path d="M0 22h160M0 52h160M80 140v30M50 170h60"/>
