@@ -216,8 +216,8 @@ icon-theme='Lyra-OS-Icons'
 color-scheme='prefer-dark'
 
 [org/gnome/desktop/background]
-picture-uri='file:///usr/share/backgrounds/lyra/os-light.png'
-picture-uri-dark='file:///usr/share/backgrounds/lyra/os.png'
+picture-uri='file:///usr/share/backgrounds/lyra/nebula-light.png'
+picture-uri-dark='file:///usr/share/backgrounds/lyra/nebula.png'
 picture-options='zoom'
 
 [org/gnome/shell]

@@ -8,7 +8,16 @@ jobs:
       - run: zypper --non-interactive install tar xz git sassc ImageMagick nodejs rsvg-convert cantarell-fonts
       - uses: actions/checkout@v4
       - run: ./scripts/build.sh
+      - run: ./scripts/build-wallpaper-variants.sh
       - run: |
+          test -f dist/backgrounds/nebula.png
+          test -f dist/backgrounds/nebula-light.png
+          test -f dist/backgrounds/nebula.jxl
+          test -f dist/backgrounds/nebula-light.jxl
+          grep -Fqx "picture-uri='file:///usr/share/backgrounds/lyra/nebula-light.png'" \
+            src/defaults/99-lyra-os.gschema.override
+          grep -Fqx "picture-uri-dark='file:///usr/share/backgrounds/lyra/nebula.png'" \
+            src/defaults/99-lyra-os.gschema.override
           grep -Fqx 'ModuleName=two-step' dist/plymouth/Lyra-OS/Lyra-OS.plymouth
           test -f dist/plymouth/Lyra-OS/watermark.png
           test -x dist/dracut/51lyra-plymouth/module-setup.sh

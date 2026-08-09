@@ -5,8 +5,6 @@
 @define-color ent_border #D5DAE1;
 @define-color ent_text #1B2430;
 @define-color ent_text_dim #5A6572;
-@define-color ent_accent #1D4ED8;
-@define-color ent_accent_hover #2563EB;
 @define-color ent_success #187044;
 @define-color ent_warning #85580F;
 @define-color ent_danger #A52626;
@@ -27,9 +25,11 @@
 @define-color dialog_fg_color @ent_text;
 @define-color card_bg_color @ent_surface;
 @define-color card_fg_color @ent_text;
-@define-color accent_bg_color @ent_accent;
-@define-color accent_fg_color white;
-@define-color accent_color @ent_accent_hover;
+/* accent_bg_color/accent_fg_color/accent_color intentionally left undefined
+   here: libadwaita 1.6+ injects them earlier in the cascade from
+   org.gnome.desktop.interface accent-color (the picker in Vega's aparência
+   tab), and any @define-color in this stylesheet would override that choice
+   with a fixed brand blue regardless of what the user picked. */
 @define-color destructive_bg_color @ent_danger;
 @define-color destructive_fg_color white;
 @define-color destructive_color @ent_danger;
@@ -42,7 +42,7 @@
 button, entry, popover > contents, dialog, .card { border-radius: 8px; }
 headerbar { box-shadow: none; }
 button:focus-visible, entry:focus-visible, row:focus-visible, listitem:focus-visible {
-  outline: 2px solid @ent_accent;
+  outline: 2px solid @accent_color;
   outline-offset: 2px;
 }
 

@@ -72,11 +72,10 @@ if ((uninstall)); then
     /usr/share/plymouth/themes/Lyra-OS \
     /usr/lib/dracut/modules.d/51lyra-plymouth \
     /usr/share/lyra-os-theme
-  sudo rm -f /usr/share/backgrounds/lyra/os.png \
-    /usr/share/backgrounds/lyra/os-light.png \
-    /usr/share/backgrounds/lyra/os.jxl \
-    /usr/share/backgrounds/lyra/os-light.jxl \
+  sudo rm -f /usr/share/backgrounds/lyra/*.png \
+    /usr/share/backgrounds/lyra/*.jxl \
     /usr/share/gnome-background-properties/lyra-os.xml
+  sudo rmdir /usr/share/backgrounds/lyra 2>/dev/null || true
   if ((activate)) && command -v gsettings >/dev/null 2>&1; then
     [[ $(readlink "$HOME/.config/gtk-4.0/gtk.css" 2>/dev/null || true) == /usr/share/themes/Lyra-OS* ]] && rm -f "$HOME/.config/gtk-4.0/gtk.css"
     gsettings reset org.gnome.shell.extensions.user-theme name 2>/dev/null || true
@@ -160,6 +159,7 @@ command -v sassc >/dev/null 2>&1 || die 'sassc is required'
 say 'Building theme, icons, wallpapers, GRUB theme and Plymouth theme'
 "$root/scripts/build.sh"
 "$root/scripts/build-icons.sh"
+"$root/scripts/build-wallpaper-variants.sh"
 
 say 'Installing system files'
 sudo install -d /usr/share/themes /usr/share/icons \
@@ -226,9 +226,9 @@ if ((activate)) && command -v gsettings >/dev/null 2>&1; then
   gsettings set org.gnome.desktop.interface accent-color 'blue' 2>/dev/null || true
   gsettings set org.gnome.desktop.interface color-scheme "$scheme"
   gsettings set org.gnome.desktop.background picture-uri \
-    'file:///usr/share/backgrounds/lyra/os-light.png'
+    'file:///usr/share/backgrounds/lyra/nebula-light.png'
   gsettings set org.gnome.desktop.background picture-uri-dark \
-    'file:///usr/share/backgrounds/lyra/os.png'
+    'file:///usr/share/backgrounds/lyra/nebula.png'
   if [[ $(readlink "$HOME/.config/gtk-4.0/gtk.css" 2>/dev/null || true) == /usr/share/themes/Lyra-OS* ]]; then
     rm -f "$HOME/.config/gtk-4.0/gtk.css"
   fi
@@ -298,8 +298,8 @@ icon-theme='Lyra-OS-Icons'
 color-scheme='$scheme'
 
 [org/gnome/desktop/background]
-picture-uri='file:///usr/share/backgrounds/lyra/os-light.png'
-picture-uri-dark='file:///usr/share/backgrounds/lyra/os.png'
+picture-uri='file:///usr/share/backgrounds/lyra/nebula-light.png'
+picture-uri-dark='file:///usr/share/backgrounds/lyra/nebula.png'
 picture-options='zoom'
 
 [org/gnome/shell]

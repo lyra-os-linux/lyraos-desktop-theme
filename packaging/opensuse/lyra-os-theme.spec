@@ -49,6 +49,7 @@ configs with a Lyra ascii logo.
 
 %build
 ./scripts/build.sh
+./scripts/build-wallpaper-variants.sh
 
 %install
 install -d %{buildroot}%{_datadir}/themes
@@ -136,8 +137,8 @@ icon-theme='Lyra-OS-Icons'
 color-scheme='prefer-dark'
 
 [org/gnome/desktop/background]
-picture-uri='file:///usr/share/backgrounds/lyra/os-light.png'
-picture-uri-dark='file:///usr/share/backgrounds/lyra/os.png'
+picture-uri='file:///usr/share/backgrounds/lyra/nebula-light.png'
+picture-uri-dark='file:///usr/share/backgrounds/lyra/nebula.png'
 picture-options='zoom'
 
 [org/gnome/shell]
@@ -242,10 +243,8 @@ fi
 # fails without these.
 %dir %{_datadir}/backgrounds
 %dir %{_datadir}/backgrounds/lyra
-%{_datadir}/backgrounds/lyra/os.png
-%{_datadir}/backgrounds/lyra/os.jxl
-%{_datadir}/backgrounds/lyra/os-light.png
-%{_datadir}/backgrounds/lyra/os-light.jxl
+%{_datadir}/backgrounds/lyra/*.png
+%{_datadir}/backgrounds/lyra/*.jxl
 %dir %{_datadir}/gnome-background-properties
 %{_datadir}/gnome-background-properties/lyra-os.xml
 %{_datadir}/glib-2.0/schemas/99-lyra-os.gschema.override

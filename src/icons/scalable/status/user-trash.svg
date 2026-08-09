@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs><linearGradient id="aurora" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#2AC7FD"/><stop offset="100%" stop-color="#BE49FD"/></linearGradient></defs>
   <path fill="#333A44" d="M13 18h38l-3 39H16z"/>
-  <path fill="#2563EB" d="M10 12h15l2-5h10l2 5h15v6H10z"/>
+  <path fill="url(#aurora)" d="M10 12h15l2-5h10l2 5h15v6H10z"/>
   <path fill="none" stroke="#9AA3AE" stroke-width="3" d="M25 27v20m14-20v20"/>
 </svg>
-

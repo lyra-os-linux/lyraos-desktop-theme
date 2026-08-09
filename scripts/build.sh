@@ -39,7 +39,7 @@ token_value() {
 
 render_wallpaper() {
   local tokens=$1 stem=$2
-  local bg surface border text brand_start brand_end watermark_opacity
+  local bg surface border text brand_start brand_end watermark_opacity glow_opacity
   bg=$(token_value "$tokens" ent-bg)
   surface=$(token_value "$tokens" ent-surface)
   border=$(token_value "$tokens" ent-border)
@@ -47,10 +47,12 @@ render_wallpaper() {
   brand_start=$(token_value "$tokens" ent-brand-start)
   brand_end=$(token_value "$tokens" ent-brand-end)
   watermark_opacity=$(token_value "$tokens" ent-watermark-opacity)
+  glow_opacity=$(token_value "$tokens" ent-glow-opacity)
   sed -e "s/@ENT_BG@/$bg/g" -e "s/@ENT_SURFACE@/$surface/g" \
       -e "s/@ENT_BORDER@/$border/g" -e "s/@ENT_TEXT@/$text/g" \
       -e "s/@ENT_BRAND_START@/$brand_start/g" -e "s/@ENT_BRAND_END@/$brand_end/g" \
       -e "s/@ENT_WATERMARK_OPACITY@/$watermark_opacity/g" \
+      -e "s/@ENT_GLOW_OPACITY@/$glow_opacity/g" \
       "$root/src/wallpaper/os.svg" > "$dist/backgrounds/$stem.svg"
   svg_to_png "$dist/backgrounds/$stem.svg" "$dist/backgrounds/$stem.png" \
     3840 2160

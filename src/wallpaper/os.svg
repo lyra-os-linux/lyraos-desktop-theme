@@ -1,7 +1,30 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="3840" height="2160" viewBox="0 0 3840 2160">
   <title>Lyra OS</title>
-  <desc>Flat angular corporate wallpaper for Lyra OS</desc>
+  <desc>Flat angular corporate wallpaper for Lyra OS, with an aurora brand glow</desc>
+  <defs>
+    <linearGradient id="lyraMark" gradientUnits="userSpaceOnUse" x1="60" y1="0" x2="210" y2="200">
+      <stop offset="0%" stop-color="@ENT_BRAND_START@"/>
+      <stop offset="100%" stop-color="@ENT_BRAND_END@"/>
+    </linearGradient>
+    <linearGradient id="auroraGlowA" gradientUnits="userSpaceOnUse" x1="-200" y1="-260" x2="1900" y2="760">
+      <stop offset="0%" stop-color="@ENT_BRAND_START@" stop-opacity="0.95"/>
+      <stop offset="60%" stop-color="@ENT_BRAND_END@" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="@ENT_BRAND_END@" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="auroraGlowB" gradientUnits="userSpaceOnUse" x1="2200" y1="1040" x2="3980" y2="1980">
+      <stop offset="0%" stop-color="@ENT_BRAND_END@" stop-opacity="0"/>
+      <stop offset="55%" stop-color="@ENT_BRAND_END@" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="@ENT_BRAND_START@" stop-opacity="0.85"/>
+    </linearGradient>
+    <filter id="auroraBlur" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="170"/>
+    </filter>
+  </defs>
   <rect width="3840" height="2160" fill="@ENT_BG@"/>
+  <g opacity="@ENT_GLOW_OPACITY@" filter="url(#auroraBlur)">
+    <ellipse cx="640" cy="220" rx="1500" ry="640" fill="url(#auroraGlowA)" transform="rotate(-9 640 220)"/>
+    <ellipse cx="3220" cy="1760" rx="1300" ry="620" fill="url(#auroraGlowB)" transform="rotate(-9 3220 1760)"/>
+  </g>
   <g fill="none" stroke="@ENT_BORDER@" stroke-width="2" opacity="0.46">
     <path d="M0 310H920L1280 670H2140L2500 310H3840"/>
     <path d="M0 720H640L1050 1130H1950L2320 760H3840"/>
@@ -12,13 +35,14 @@
     <path d="M0 0h1210L790 420H0z"/>
     <path d="M3840 2160H2580l430-430h830z"/>
   </g>
+  <g fill="url(#lyraMark)" opacity="0.5">
+    <path d="M3260 470l6 20 20 6-20 6-6 20-6-20-20-6 20-6Z"/>
+    <path d="M560 1480l5 16 16 5-16 5-5 16-5-16-16-5 16-5Z"/>
+    <path d="M2860 1240l4 13 13 4-13 4-4 13-4-13-13-4 13-4Z"/>
+    <path d="M1660 300l4 13 13 4-13 4-4 13-4-13-13-4 13-4Z"/>
+    <path d="M3560 1120l5 16 16 5-16 5-5 16-5-16-16-5 16-5Z"/>
+  </g>
   <g transform="translate(3300 1650) scale(2)" opacity="@ENT_WATERMARK_OPACITY@">
-    <defs>
-      <linearGradient id="lyraMark" gradientUnits="userSpaceOnUse" x1="60" y1="0" x2="210" y2="200">
-        <stop offset="0%" stop-color="@ENT_BRAND_START@"/>
-        <stop offset="100%" stop-color="@ENT_BRAND_END@"/>
-      </linearGradient>
-    </defs>
     <path fill="url(#lyraMark)" d="M104 190A140 140 0 0 0 199 56 96 96 0 0 1 104 190Z"/>
     <path fill="none" stroke="url(#lyraMark)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"
           d="M150 14C118 14 96 34 92 62L92 150C92 166 86 176 76 180 68 183 62 180 60 174"/>

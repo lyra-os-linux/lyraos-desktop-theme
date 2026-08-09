@@ -10,5 +10,40 @@
     <pcolor>#F4F5F7</pcolor>
     <scolor>#16191D</scolor>
   </wallpaper>
+  <wallpaper deleted="false">
+    <name>Lyra OS — Nebula</name>
+    <filename>/usr/share/backgrounds/lyra/nebula-light.png</filename>
+    <filename-dark>/usr/share/backgrounds/lyra/nebula.png</filename-dark>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>#F4F5F7</pcolor>
+    <scolor>#16191D</scolor>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Lyra OS — Borealis</name>
+    <filename>/usr/share/backgrounds/lyra/borealis-light.png</filename>
+    <filename-dark>/usr/share/backgrounds/lyra/borealis.png</filename-dark>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>#F4F5F7</pcolor>
+    <scolor>#16191D</scolor>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Lyra OS — Solstice</name>
+    <filename>/usr/share/backgrounds/lyra/solstice-light.png</filename>
+    <filename-dark>/usr/share/backgrounds/lyra/solstice.png</filename-dark>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>#F4F5F7</pcolor>
+    <scolor>#16191D</scolor>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Lyra OS — Glacier</name>
+    <filename>/usr/share/backgrounds/lyra/glacier-light.png</filename>
+    <filename-dark>/usr/share/backgrounds/lyra/glacier.png</filename-dark>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>#F4F5F7</pcolor>
+    <scolor>#16191D</scolor>
+  </wallpaper>
 </wallpapers>
-
