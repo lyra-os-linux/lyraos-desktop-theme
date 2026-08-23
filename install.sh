@@ -9,13 +9,14 @@ uninstall=0
 grub=1
 plymouth=1
 gdm=1
+full_theme=0
 
 usage() {
   cat <<'EOF'
 Lyra OS installer
 
 Usage: install.sh [--dark|--light] [--no-activate] [--no-grub]
-                   [--no-plymouth] [--no-gdm] [--uninstall]
+                   [--no-plymouth] [--no-gdm] [--full-theme] [--uninstall]
 
   --dark          Use dark Adwaita with Lyra OS icons (default)
   --light         Use light Adwaita with Lyra OS icons
@@ -24,6 +25,10 @@ Usage: install.sh [--dark|--light] [--no-activate] [--no-grub]
   --no-grub       Skip installing and activating the GRUB theme entirely
   --no-plymouth   Skip installing and activating the Plymouth theme entirely
   --no-gdm        Skip theming the GDM login screen entirely
+  --full-theme    Also style window chrome (GTK 3/4 headerbars) and the
+                   GNOME Shell top bar/overview with Lyra OS, instead of
+                   leaving Adwaita's own chrome in place. This can break the
+                   look of GNOME Shell's Quick Settings on some versions.
   --uninstall     Remove both themes and restore GNOME defaults
 EOF
 }
@@ -36,6 +41,7 @@ while (($#)); do
     --no-grub) grub=0 ;;
     --no-plymouth) plymouth=0 ;;
     --no-gdm) gdm=0 ;;
+    --full-theme) full_theme=1 ;;
     --uninstall) uninstall=1 ;;
     -h|--help) usage; exit 0 ;;
     *) printf 'Unknown option: %s\n' "$1" >&2; usage >&2; exit 2 ;;
@@ -77,7 +83,17 @@ if ((uninstall)); then
     /usr/share/gnome-background-properties/lyra-os.xml
   sudo rmdir /usr/share/backgrounds/lyra 2>/dev/null || true
   if ((activate)) && command -v gsettings >/dev/null 2>&1; then
-    [[ $(readlink "$HOME/.config/gtk-4.0/gtk.css" 2>/dev/null || true) == /usr/share/themes/Lyra-OS* ]] && rm -f "$HOME/.config/gtk-4.0/gtk.css"
+    if [[ $(readlink "$HOME/.config/gtk-4.0/gtk.css" 2>/dev/null || true) == /usr/share/themes/Lyra-OS* ]]; then
+      rm -f "$HOME/.config/gtk-4.0/gtk.css"
+      [[ -e "$HOME/.config/gtk-4.0/gtk.css.lyra-theme-backup" ]] && \
+        mv "$HOME/.config/gtk-4.0/gtk.css.lyra-theme-backup" "$HOME/.config/gtk-4.0/gtk.css"
+    fi
+    uuid=user-theme@gnome-shell-extensions.gcampax.github.com
+    current=$(gsettings get org.gnome.shell enabled-extensions)
+    if [[ $current == *"'$uuid'"* ]]; then
+      gsettings set org.gnome.shell enabled-extensions \
+        "$(sed -E "s/'$uuid', //; s/, '$uuid'//; s/'$uuid'//" <<<"$current")"
+    fi
     gsettings reset org.gnome.shell.extensions.user-theme name 2>/dev/null || true
     gsettings reset org.gnome.desktop.interface gtk-theme 2>/dev/null || true
     gsettings reset org.gnome.desktop.interface icon-theme 2>/dev/null || true
@@ -93,10 +109,12 @@ if ((uninstall)); then
     rebuild_grub_config
   fi
   if ((activate)) && command -v plymouth-set-default-theme >/dev/null 2>&1; then
-    if [[ -s /etc/plymouth/lyra-theme-backup ]]; then
-      sudo plymouth-set-default-theme -R "$(sudo cat /etc/plymouth/lyra-theme-backup)"
-    else
-      sudo plymouth-set-default-theme -R details
+    if [[ $(plymouth-set-default-theme 2>/dev/null) == Lyra-OS ]]; then
+      if [[ -s /etc/plymouth/lyra-theme-backup ]]; then
+        sudo plymouth-set-default-theme -R "$(sudo cat /etc/plymouth/lyra-theme-backup)"
+      else
+        sudo plymouth-set-default-theme -R details
+      fi
     fi
     sudo rm -f /etc/plymouth/lyra-theme-backup
   fi
@@ -137,7 +155,7 @@ install_dependencies() {
     cantarell-fonts dracut plymouth-plugin-two-step plymouth-scripts
     plymouth-theme-spinner
   )
-  ((gdm)) && packages+=(dconf gnome-shell-extension-user-theme)
+  { ((gdm)) || ((full_theme)); } && packages+=(dconf gnome-shell-extension-user-theme)
   sudo zypper --non-interactive install "${packages[@]}"
 }
 
@@ -217,8 +235,10 @@ fi
 if ((activate)) && command -v gsettings >/dev/null 2>&1; then
   if [[ $variant == light ]]; then
     scheme=prefer-light
+    shell_gtk_theme=Lyra-OS-Light
   else
     scheme=prefer-dark
+    shell_gtk_theme=Lyra-OS
   fi
   say 'Activating Adwaita with Lyra OS icons'
   gsettings reset org.gnome.shell.extensions.user-theme name 2>/dev/null || true
@@ -232,6 +252,39 @@ if ((activate)) && command -v gsettings >/dev/null 2>&1; then
     'file:///usr/share/backgrounds/lyra/nebula.png'
   if [[ $(readlink "$HOME/.config/gtk-4.0/gtk.css" 2>/dev/null || true) == /usr/share/themes/Lyra-OS* ]]; then
     rm -f "$HOME/.config/gtk-4.0/gtk.css"
+    if [[ -e "$HOME/.config/gtk-4.0/gtk.css.lyra-theme-backup" ]]; then
+      mv "$HOME/.config/gtk-4.0/gtk.css.lyra-theme-backup" "$HOME/.config/gtk-4.0/gtk.css"
+    fi
+  fi
+  uuid=user-theme@gnome-shell-extensions.gcampax.github.com
+  current=$(gsettings get org.gnome.shell enabled-extensions)
+  if [[ $current == *"'$uuid'"* ]]; then
+    gsettings set org.gnome.shell enabled-extensions \
+      "$(sed -E "s/'$uuid', //; s/, '$uuid'//; s/'$uuid'//" <<<"$current")"
+  fi
+  if ((full_theme)); then
+    say 'Activating Lyra OS window and Shell styling (may affect GNOME Quick Settings)'
+    gsettings set org.gnome.desktop.interface gtk-theme "$shell_gtk_theme"
+    mkdir -p "$HOME/.config/gtk-4.0"
+    if [[ -f "$HOME/.config/gtk-4.0/gtk.css" && \
+        ! -f "$HOME/.config/gtk-4.0/gtk.css.lyra-theme-backup" ]]; then
+      cp "$HOME/.config/gtk-4.0/gtk.css" "$HOME/.config/gtk-4.0/gtk.css.lyra-theme-backup"
+    fi
+    ln -sf "/usr/share/themes/$shell_gtk_theme/gtk-4.0/gtk.css" \
+      "$HOME/.config/gtk-4.0/gtk.css"
+    # gnome-extensions enable talks to the running Shell's extension manager,
+    # which has not scanned a system extension installed mid-session; write
+    # enabled-extensions directly via dconf instead so it takes effect on the
+    # next login, when the Shell re-scans /usr/share/gnome-shell/extensions.
+    current=$(gsettings get org.gnome.shell enabled-extensions)
+    if [[ $current != *"'$uuid'"* ]]; then
+      if [[ $current == *'[]' ]]; then
+        gsettings set org.gnome.shell enabled-extensions "['$uuid']"
+      else
+        gsettings set org.gnome.shell enabled-extensions "${current%]}, '$uuid']"
+      fi
+    fi
+    gsettings set org.gnome.shell.extensions.user-theme name "$shell_gtk_theme"
   fi
 fi
 
@@ -304,4 +357,8 @@ EOF
 fi
 
 say 'Lyra OS installation complete'
-printf 'Adwaita remains active for GNOME Shell and applications; Lyra supplies the icons.\n'
+if ((activate)) && ((full_theme)); then
+  printf 'Lyra OS styles GNOME Shell chrome and application windows. Log out and back in for the Shell theme to fully apply.\n'
+else
+  printf 'Adwaita remains active for GNOME Shell and applications; Lyra supplies the icons.\n'
+fi
