@@ -69,6 +69,10 @@ pelo terminal.
 --no-grub       não instala nem ativa o tema do GRUB
 --no-plymouth   não instala nem ativa o tema do Plymouth
 --no-gdm        não ativa o tema Lyra OS na tela de login do GDM
+--full-theme    também estiliza as janelas (headerbars GTK 3/4) e a barra
+                superior/overview do GNOME Shell com o Lyra OS, em vez de
+                manter o chrome padrão do Adwaita. Pode quebrar a aparência
+                dos Quick Settings do Shell em algumas versões do GNOME.
 --uninstall     remove os arquivos e restaura as preferências
 --help          mostra a ajuda
 ```
@@ -159,6 +163,35 @@ gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 O GNOME Shell e os aplicativos permanecem no Adwaita padrão; somente os ícones
 são fornecidos pelo Lyra OS. Isso mantém compatibilidade integral com
 os controles rápidos das versões atuais do GNOME.
+
+### Estilo Lyra OS nas janelas e no Shell (`--full-theme`)
+
+Por padrão o instalador não estiliza as janelas nem o Shell — ele só troca os
+ícones, mantendo o chrome do Adwaita, pelos motivos acima. Os arquivos do tema
+completo (headerbars GTK 3/4 e barra superior/overview do GNOME Shell) já são
+compilados em `dist/Lyra-OS` e `dist/Lyra-OS-Light`; a flag `--full-theme`
+ativa esse tema nas janelas e no Shell, em vez de só nos ícones:
+
+```bash
+./scripts/install-local.sh --full-theme
+```
+
+Isso requer `gnome-shell-extension-user-theme` (instalada automaticamente
+junto com essa flag) e pode alterar a aparência dos Quick Settings do GNOME
+Shell em algumas versões — por isso não é o padrão. Para ativar manualmente
+sem o instalador:
+
+```bash
+gsettings set org.gnome.desktop.interface gtk-theme 'Lyra-OS'
+gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com
+gsettings set org.gnome.shell.extensions.user-theme name 'Lyra-OS'
+mkdir -p ~/.config/gtk-4.0
+ln -sf /usr/share/themes/Lyra-OS/gtk-4.0/gtk.css ~/.config/gtk-4.0/gtk.css
+```
+
+Use `Lyra-OS-Light` nos três comandos para a variante clara. Rodar
+`--uninstall` (ou os comandos `gsettings reset`/remover o symlink acima)
+restaura o Adwaita padrão.
 
 ### Variante clara
 
