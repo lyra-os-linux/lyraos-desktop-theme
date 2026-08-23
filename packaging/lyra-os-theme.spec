@@ -262,23 +262,23 @@ fi
 %config(noreplace) %{_sysconfdir}/skel/.config/fastfetch/config.jsonc
 
 %changelog
-* Fri Jul 24 2026 Lyra OS Team <rodrigo@w3ti.com.br> - 1.5.0-1
+* Fri Jul 24 2026 Lyra OS Team <rodrigo@lyraos.com.br> - 1.5.0-1
 - Theme the GDM login screen (icons, wallpaper and Shell colors) via a
   dconf gdm profile
 
-* Thu Jul 23 2026 Lyra OS Team <rodrigo@w3ti.com.br> - 1.4.0-1
+* Thu Jul 23 2026 Lyra OS Team <rodrigo@lyraos.com.br> - 1.4.0-1
 - Add Plymouth boot theme matching GRUB, and a neofetch config with a Lyra
   ascii logo
 - Drop KDE Plasma/Konsole and XFCE support to focus on GNOME
 
-* Tue Jul 21 2026 Lyra OS Team <rodrigo@w3ti.com.br> - 1.3.0-1
+* Tue Jul 21 2026 Lyra OS Team <rodrigo@lyraos.com.br> - 1.3.0-1
 - Add xfwm4 window theme and xfce4-terminal color scheme for XFCE
 
-* Tue Jul 21 2026 Lyra OS Team <rodrigo@w3ti.com.br> - 1.2.0-1
+* Tue Jul 21 2026 Lyra OS Team <rodrigo@lyraos.com.br> - 1.2.0-1
 - Add Plasma color schemes and matching Konsole color schemes for KDE
 
-* Sun Jul 19 2026 Lyra OS Team <rodrigo@w3ti.com.br> - 1.1.0-1
+* Sun Jul 19 2026 Lyra OS Team <rodrigo@lyraos.com.br> - 1.1.0-1
 - Keep Adwaita active by default and add the GRUB theme
 
-* Sun Jul 19 2026 Lyra OS Team <rodrigo@w3ti.com.br> - 1.0.0-1
+* Sun Jul 19 2026 Lyra OS Team <rodrigo@lyraos.com.br> - 1.0.0-1
 - Initial RPM package with dark and light variants

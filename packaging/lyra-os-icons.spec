@@ -27,8 +27,8 @@ cp -a dist/Lyra-OS-Icons %{buildroot}%{_datadir}/icons/
 %{_datadir}/icons/Lyra-OS-Icons/
 
 %changelog
-* Sun Jul 19 2026 Lyra OS Team <rodrigo@w3ti.com.br> - 1.1.0-1
+* Sun Jul 19 2026 Lyra OS Team <rodrigo@lyraos.com.br> - 1.1.0-1
 - Release icons for Lyra Enterprise 1.1.0
 
-* Sun Jul 19 2026 Lyra OS Team <rodrigo@w3ti.com.br> - 1.0.0-1
+* Sun Jul 19 2026 Lyra OS Team <rodrigo@lyraos.com.br> - 1.0.0-1
 - Initial os icon theme
