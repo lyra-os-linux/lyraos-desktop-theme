@@ -57,10 +57,10 @@ if [[ ! -f "$fastfetch_share/config.jsonc" || \
   fastfetch_tmp=$(mktemp -d)
   trap 'rm -rf "$fastfetch_tmp"' EXIT
   curl --proto '=https' --tlsv1.2 -fsSL \
-    https://raw.githubusercontent.com/britors/Lyra-Theme/main/src/fastfetch/config.jsonc \
+    https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/src/fastfetch/config.jsonc \
     -o "$fastfetch_tmp/config.jsonc"
   curl --proto '=https' --tlsv1.2 -fsSL \
-    https://raw.githubusercontent.com/britors/Lyra-Theme/main/src/fastfetch/logo.txt \
+    https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/src/fastfetch/logo.txt \
     -o "$fastfetch_tmp/logo.txt"
   sudo install -d "$fastfetch_share"
   sudo install -m 0644 "$fastfetch_tmp/config.jsonc" \

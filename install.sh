@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-repo=${LYRA_REPO:-britors/Lyra-Theme}
+repo=${LYRA_REPO:-lyra-os-linux/lyraos-desktop-theme}
 ref=${LYRA_REF:-main}
 variant=dark
 activate=1

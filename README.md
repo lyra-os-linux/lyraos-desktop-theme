@@ -22,14 +22,14 @@ Revise o [install.sh](install.sh) antes de executá-lo. Requer openSUSE
 
 ```bash
 curl --proto '=https' --tlsv1.2 -fsSL \
-  https://raw.githubusercontent.com/britors/Lyra-Theme/main/install.sh | bash
+  https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/install.sh | bash
 ```
 
 Variante light:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -fsSL \
-  https://raw.githubusercontent.com/britors/Lyra-Theme/main/install.sh | bash -s -- --light
+  https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/install.sh | bash -s -- --light
 ```
 
 ### Instalação pelos pacotes RPM
@@ -40,14 +40,14 @@ Neofetch:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -fsSL \
-  https://raw.githubusercontent.com/britors/Lyra-Theme/main/install-rpm.sh | bash
+  https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/install-rpm.sh | bash
 ```
 
 Para usar a variante clara:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -fsSL \
-  https://raw.githubusercontent.com/britors/Lyra-Theme/main/install-rpm.sh | bash -s -- --light
+  https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/install-rpm.sh | bash -s -- --light
 ```
 
 O instalador instala as dependências via `zypper`, compila os arquivos,
@@ -81,7 +81,7 @@ Exemplo para instalar sem ativação automática:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -fsSL \
-  https://raw.githubusercontent.com/britors/Lyra-Theme/main/install.sh | bash -s -- --no-activate
+  https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/install.sh | bash -s -- --no-activate
 ```
 
 ## Requisitos
@@ -100,7 +100,7 @@ O instalador resolve esses pacotes automaticamente via `zypper`.
 ## Build a partir do repositório
 
 ```bash
-git clone https://github.com/britors/Lyra-Theme.git
+git clone https://github.com/lyra-os-linux/lyraos-desktop-theme.git
 cd Lyra-Theme
 ./scripts/build.sh
 ./scripts/build-icons.sh
@@ -334,7 +334,7 @@ packaging/       especificações RPM
 
 ```bash
 curl --proto '=https' --tlsv1.2 -fsSL \
-  https://raw.githubusercontent.com/britors/Lyra-Theme/main/install.sh | bash -s -- --uninstall
+  https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/install.sh | bash -s -- --uninstall
 ```
 
 ## Licenças

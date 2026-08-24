@@ -3,7 +3,7 @@ Version:        1.5.0
 Release:        1%{?dist}
 Summary:        Corporate GNOME, GRUB and Plymouth theme for Lyra OS
 License:        GPL-3.0-or-later AND LGPL-2.1-or-later
-URL:            https://github.com/britors/lyra-os-theme
+URL:            https://github.com/lyra-os-linux/lyraos-desktop-theme
 Source0:        %{name}-%{version}.tar.xz
 BuildArch:      noarch
 # cantarell-fonts também precisa estar disponível em build time: o texto
