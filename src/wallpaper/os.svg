@@ -46,16 +46,16 @@
   <!-- Odisseia: rota do barco entre os quatro marcos da jornada, até o
        ponto de chegada junto à marca d'água (o "porto" de origem/casa). -->
   <path fill="none" stroke="@ENT_BORDER@" stroke-width="3" stroke-dasharray="18 16" opacity="0.4"
-        d="M260 1780C500 1300 680 760 980 560C1260 380 1500 340 1780 340C2060 340 2260 500 2450 720C2650 940 2840 1000 3000 1120C3140 1230 3230 1420 3300 1650"/>
+        d="M260 1780C480 1340 640 840 860 640C1120 440 1500 340 1780 340C2060 340 2260 500 2450 720C2650 940 2840 1000 3000 1120C3140 1230 3230 1420 3300 1650"/>
 
   <!-- Sereias: canto que tenta desviar os navegantes -->
-  <g transform="translate(980 560) scale(1.7)" opacity="0.6">
-    <path fill="none" stroke="url(#lyraMark)" stroke-width="7" stroke-linecap="round"
+  <g transform="translate(860 640) scale(2.1)" opacity="0.7">
+    <path fill="none" stroke="url(#lyraMark)" stroke-width="8" stroke-linecap="round"
           d="M-26 32C-36 8 -30 -20 -8 -34"/>
-    <path fill="none" stroke="url(#lyraMark)" stroke-width="7" stroke-linecap="round"
+    <path fill="none" stroke="url(#lyraMark)" stroke-width="8" stroke-linecap="round"
           d="M26 32C36 8 30 -20 8 -34"/>
-    <path fill="url(#lyraMark)" d="M-26 32h52v8h-52z"/>
-    <g stroke="url(#lyraMark)" stroke-width="4" stroke-linecap="round">
+    <path fill="url(#lyraMark)" d="M-26 32h52v9h-52z"/>
+    <g stroke="url(#lyraMark)" stroke-width="4.5" stroke-linecap="round">
       <path d="M-14 30V-8M-4 30V-16M4 30V-16M14 30V-8"/>
     </g>
   </g>
@@ -79,10 +79,11 @@
   </g>
 
   <!-- O barco, em rota entre as Sereias e o Ciclope -->
-  <g transform="translate(1400 460) scale(2.2) rotate(-12)" opacity="0.68">
-    <path fill="@ENT_SURFACE@" d="M-46 34L46 34L34 54L-34 54Z"/>
-    <path fill="none" stroke="url(#lyraMark)" stroke-width="6" stroke-linecap="round" d="M0 34V-56"/>
-    <path fill="url(#lyraMark)" d="M4 -56L46 20L4 20Z"/>
+  <g transform="translate(1400 460) scale(2.2) rotate(-12)" opacity="0.72">
+    <path fill="@ENT_BORDER@" stroke="url(#lyraMark)" stroke-width="4" stroke-linejoin="round"
+          d="M-52 32L52 32L38 58L-38 58Z"/>
+    <path fill="none" stroke="url(#lyraMark)" stroke-width="6" stroke-linecap="round" d="M0 32V-48"/>
+    <path fill="url(#lyraMark)" d="M4 -48L36 16L4 16Z"/>
   </g>
 
   <g transform="translate(3300 1650) scale(2)" opacity="@ENT_WATERMARK_OPACITY@">
