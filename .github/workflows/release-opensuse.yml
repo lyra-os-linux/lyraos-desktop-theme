@@ -61,13 +61,13 @@ jobs:
           test -f /usr/share/grub/themes/Lyra-OS/theme.txt
           test -d /usr/share/icons/Lyra-OS-Icons
           test -f /usr/share/glib-2.0/schemas/99-lyra-os.gschema.override
-          test -f /usr/share/backgrounds/lyra/nebula.png
-          test -f /usr/share/backgrounds/lyra/nebula-light.png
-          test -f /usr/share/backgrounds/lyra/nebula.jxl
-          test -f /usr/share/backgrounds/lyra/nebula-light.jxl
-          grep -Fqx "picture-uri='file:///usr/share/backgrounds/lyra/nebula-light.png'" \
+          test -f /usr/share/backgrounds/lyra/lyra-voyage.png
+          test -f /usr/share/backgrounds/lyra/lyra-voyage.jxl
+          test "$(find /usr/share/backgrounds/lyra -maxdepth 1 -name '*.png' | wc -l)" -eq 11
+          test "$(find /usr/share/backgrounds/lyra -maxdepth 1 -name '*.jxl' | wc -l)" -eq 11
+          grep -Fqx "picture-uri='file:///usr/share/backgrounds/lyra/lyra-voyage.png'" \
             /usr/share/glib-2.0/schemas/99-lyra-os.gschema.override
-          grep -Fqx "picture-uri-dark='file:///usr/share/backgrounds/lyra/nebula.png'" \
+          grep -Fqx "picture-uri-dark='file:///usr/share/backgrounds/lyra/lyra-voyage.png'" \
             /usr/share/glib-2.0/schemas/99-lyra-os.gschema.override
           test -f /etc/skel/.config/neofetch/config.conf
           test -f /etc/skel/.config/fastfetch/config.jsonc

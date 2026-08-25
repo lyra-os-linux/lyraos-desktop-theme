@@ -400,9 +400,9 @@ if ((activate)) && command -v gsettings >/dev/null 2>&1; then
   gsettings set org.gnome.desktop.interface accent-color 'blue' 2>/dev/null || true
   gsettings set org.gnome.desktop.interface color-scheme "$scheme"
   gsettings set org.gnome.desktop.background picture-uri \
-    'file:///usr/share/backgrounds/lyra/nebula-light.png'
+    'file:///usr/share/backgrounds/lyra/lyra-voyage.png'
   gsettings set org.gnome.desktop.background picture-uri-dark \
-    'file:///usr/share/backgrounds/lyra/nebula.png'
+    'file:///usr/share/backgrounds/lyra/lyra-voyage.png'
   if [[ $(readlink "$HOME/.config/gtk-4.0/gtk.css" 2>/dev/null || true) == /usr/share/themes/Lyra-OS* ]]; then
     rm -f "$HOME/.config/gtk-4.0/gtk.css"
     if [[ -e "$HOME/.config/gtk-4.0/gtk.css.lyra-theme-backup" ]]; then
@@ -489,8 +489,8 @@ icon-theme='Lyra-OS-Icons'
 color-scheme='$scheme'
 
 [org/gnome/desktop/background]
-picture-uri='file:///usr/share/backgrounds/lyra/nebula-light.png'
-picture-uri-dark='file:///usr/share/backgrounds/lyra/nebula.png'
+picture-uri='file:///usr/share/backgrounds/lyra/lyra-voyage.png'
+picture-uri-dark='file:///usr/share/backgrounds/lyra/lyra-voyage.png'
 picture-options='zoom'
 
 [org/gnome/shell]

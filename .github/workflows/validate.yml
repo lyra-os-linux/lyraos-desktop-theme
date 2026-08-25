@@ -13,13 +13,13 @@ jobs:
       - run: ./scripts/build.sh
       - run: ./scripts/build-wallpaper-variants.sh
       - run: |
-          test -f dist/backgrounds/nebula.png
-          test -f dist/backgrounds/nebula-light.png
-          test -f dist/backgrounds/nebula.jxl
-          test -f dist/backgrounds/nebula-light.jxl
-          grep -Fqx "picture-uri='file:///usr/share/backgrounds/lyra/nebula-light.png'" \
+          test -f dist/backgrounds/lyra-voyage.png
+          test -f dist/backgrounds/lyra-voyage.jxl
+          test "$(find dist/backgrounds -maxdepth 1 -name '*.png' | wc -l)" -eq 11
+          test "$(find dist/backgrounds -maxdepth 1 -name '*.jxl' | wc -l)" -eq 11
+          grep -Fqx "picture-uri='file:///usr/share/backgrounds/lyra/lyra-voyage.png'" \
             src/defaults/99-lyra-os.gschema.override
-          grep -Fqx "picture-uri-dark='file:///usr/share/backgrounds/lyra/nebula.png'" \
+          grep -Fqx "picture-uri-dark='file:///usr/share/backgrounds/lyra/lyra-voyage.png'" \
             src/defaults/99-lyra-os.gschema.override
           grep -Fqx 'ModuleName=two-step' dist/plymouth/Lyra-OS/Lyra-OS.plymouth
           test -f dist/plymouth/Lyra-OS/watermark.png

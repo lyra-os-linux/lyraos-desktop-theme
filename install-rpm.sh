@@ -179,9 +179,9 @@ if command -v gsettings >/dev/null 2>&1; then
   fi
 
   gsettings set org.gnome.desktop.background picture-uri \
-    'file:///usr/share/backgrounds/lyra/nebula-light.png'
+    'file:///usr/share/backgrounds/lyra/lyra-voyage.png'
   gsettings set org.gnome.desktop.background picture-uri-dark \
-    'file:///usr/share/backgrounds/lyra/nebula.png'
+    'file:///usr/share/backgrounds/lyra/lyra-voyage.png'
 else
   say warn_gsettings_missing
 fi
@@ -244,8 +244,8 @@ icon-theme='Lyra-OS-Icons'
 color-scheme='$scheme'
 
 [org/gnome/desktop/background]
-picture-uri='file:///usr/share/backgrounds/lyra/nebula-light.png'
-picture-uri-dark='file:///usr/share/backgrounds/lyra/nebula.png'
+picture-uri='file:///usr/share/backgrounds/lyra/lyra-voyage.png'
+picture-uri-dark='file:///usr/share/backgrounds/lyra/lyra-voyage.png'
 picture-options='zoom'
 
 [org/gnome/shell]

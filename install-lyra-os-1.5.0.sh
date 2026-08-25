@@ -61,8 +61,8 @@ icon-theme='Lyra-OS-Icons'
 color-scheme='prefer-dark'
 
 [org/gnome/desktop/background]
-picture-uri='file:///usr/share/backgrounds/lyra/os-light.png'
-picture-uri-dark='file:///usr/share/backgrounds/lyra/os.png'
+picture-uri='file:///usr/share/backgrounds/lyra/lyra-voyage.png'
+picture-uri-dark='file:///usr/share/backgrounds/lyra/lyra-voyage.png'
 picture-options='zoom'
 
 [org/gnome/shell]
@@ -86,7 +86,7 @@ run_as_desktop_user gsettings set \
   org.gnome.desktop.interface accent-color 'blue' || true
 run_as_desktop_user gsettings set \
   org.gnome.desktop.background picture-uri \
-  'file:///usr/share/backgrounds/lyra/os-light.png'
+  'file:///usr/share/backgrounds/lyra/lyra-voyage.png'
 
 # gsettings via runuser+D-Bus pode "ter sucesso" mas escrever numa sessão
 # errada, deixando o valor antigo (ex.: um tema já removido) preso no
@@ -99,7 +99,7 @@ if [[ $applied_icon_theme != "'Lyra-OS-Icons'" ]]; then
 fi
 run_as_desktop_user gsettings set \
   org.gnome.desktop.background picture-uri-dark \
-  'file:///usr/share/backgrounds/lyra/os.png'
+  'file:///usr/share/backgrounds/lyra/lyra-voyage.png'
 
 say 'Ativando configurações do Fastfetch e Neofetch'
 run_as_desktop_user mkdir -p \

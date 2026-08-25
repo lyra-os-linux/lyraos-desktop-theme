@@ -32,33 +32,6 @@ compile_scss() {
   done
 }
 
-token_value() {
-  local file=$1 token=$2
-  sed -n "s/^\$$token:[[:space:]]*\([^;]*\);/\1/p" "$file"
-}
-
-render_wallpaper() {
-  local tokens=$1 stem=$2
-  local bg surface border text brand_start brand_end watermark_opacity glow_opacity
-  bg=$(token_value "$tokens" ent-bg)
-  surface=$(token_value "$tokens" ent-surface)
-  border=$(token_value "$tokens" ent-border)
-  text=$(token_value "$tokens" ent-text)
-  brand_start=$(token_value "$tokens" ent-brand-start)
-  brand_end=$(token_value "$tokens" ent-brand-end)
-  watermark_opacity=$(token_value "$tokens" ent-watermark-opacity)
-  glow_opacity=$(token_value "$tokens" ent-glow-opacity)
-  sed -e "s/@ENT_BG@/$bg/g" -e "s/@ENT_SURFACE@/$surface/g" \
-      -e "s/@ENT_BORDER@/$border/g" -e "s/@ENT_TEXT@/$text/g" \
-      -e "s/@ENT_BRAND_START@/$brand_start/g" -e "s/@ENT_BRAND_END@/$brand_end/g" \
-      -e "s/@ENT_WATERMARK_OPACITY@/$watermark_opacity/g" \
-      -e "s/@ENT_GLOW_OPACITY@/$glow_opacity/g" \
-      "$root/src/wallpaper/os.svg" > "$dist/backgrounds/$stem.svg"
-  svg_to_png "$dist/backgrounds/$stem.svg" "$dist/backgrounds/$stem.png" \
-    3840 2160
-  im "$dist/backgrounds/$stem.png" -quality 92 "$dist/backgrounds/$stem.jxl"
-}
-
 command -v magick >/dev/null 2>&1 || { echo 'error: ImageMagick is required' >&2; exit 1; }
 command -v rsvg-convert >/dev/null 2>&1 || { echo 'error: rsvg-convert is required' >&2; exit 1; }
 # Exported so scripts/build-plymouth.sh (run as a separate process below) can use it too.
@@ -92,8 +65,6 @@ cp "$root/src/fastfetch/config.jsonc" "$root/src/fastfetch/logo.txt" \
   "$dist/fastfetch/"
 cp "$root/src/gdm/logo.svg" "$dist/gdm/"
 
-render_wallpaper "$root/src/shell/_tokens-dark.scss" os
-render_wallpaper "$root/src/shell/_tokens-light.scss" os-light
 cp "$root/src/wallpaper/lyra-os.xml" "$dist/gnome-background-properties/"
 
 cp "$root/src/grub/theme.txt" "$dist/grub/Lyra-OS/"

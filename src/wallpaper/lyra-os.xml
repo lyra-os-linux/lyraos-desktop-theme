@@ -2,48 +2,22 @@
 <!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
 <wallpapers>
   <wallpaper deleted="false">
-    <name>Lyra OS</name>
-    <filename>/usr/share/backgrounds/lyra/os-light.png</filename>
-    <filename-dark>/usr/share/backgrounds/lyra/os.png</filename-dark>
+    <name>Lyra OS — Voyage</name>
+    <filename>/usr/share/backgrounds/lyra/lyra-voyage.png</filename>
+    <filename-dark>/usr/share/backgrounds/lyra/lyra-voyage.png</filename-dark>
     <options>zoom</options>
     <shade_type>solid</shade_type>
-    <pcolor>#F4F5F7</pcolor>
-    <scolor>#16191D</scolor>
+    <pcolor>#080E1C</pcolor>
+    <scolor>#171337</scolor>
   </wallpaper>
-  <wallpaper deleted="false">
-    <name>Lyra OS — Nebula</name>
-    <filename>/usr/share/backgrounds/lyra/nebula-light.png</filename>
-    <filename-dark>/usr/share/backgrounds/lyra/nebula.png</filename-dark>
-    <options>zoom</options>
-    <shade_type>solid</shade_type>
-    <pcolor>#F4F5F7</pcolor>
-    <scolor>#16191D</scolor>
-  </wallpaper>
-  <wallpaper deleted="false">
-    <name>Lyra OS — Borealis</name>
-    <filename>/usr/share/backgrounds/lyra/borealis-light.png</filename>
-    <filename-dark>/usr/share/backgrounds/lyra/borealis.png</filename-dark>
-    <options>zoom</options>
-    <shade_type>solid</shade_type>
-    <pcolor>#F4F5F7</pcolor>
-    <scolor>#16191D</scolor>
-  </wallpaper>
-  <wallpaper deleted="false">
-    <name>Lyra OS — Solstice</name>
-    <filename>/usr/share/backgrounds/lyra/solstice-light.png</filename>
-    <filename-dark>/usr/share/backgrounds/lyra/solstice.png</filename-dark>
-    <options>zoom</options>
-    <shade_type>solid</shade_type>
-    <pcolor>#F4F5F7</pcolor>
-    <scolor>#16191D</scolor>
-  </wallpaper>
-  <wallpaper deleted="false">
-    <name>Lyra OS — Glacier</name>
-    <filename>/usr/share/backgrounds/lyra/glacier-light.png</filename>
-    <filename-dark>/usr/share/backgrounds/lyra/glacier.png</filename-dark>
-    <options>zoom</options>
-    <shade_type>solid</shade_type>
-    <pcolor>#F4F5F7</pcolor>
-    <scolor>#16191D</scolor>
-  </wallpaper>
+  <wallpaper deleted="false"><name>Lyra OS — Horizon</name><filename>/usr/share/backgrounds/lyra/lyra-horizon.png</filename><filename-dark>/usr/share/backgrounds/lyra/lyra-horizon.png</filename-dark><options>zoom</options></wallpaper>
+  <wallpaper deleted="false"><name>Lyra OS — Tempest</name><filename>/usr/share/backgrounds/lyra/lyra-tempest.png</filename><filename-dark>/usr/share/backgrounds/lyra/lyra-tempest.png</filename-dark><options>zoom</options></wallpaper>
+  <wallpaper deleted="false"><name>Lyra OS — Citadel</name><filename>/usr/share/backgrounds/lyra/lyra-citadel.png</filename><filename-dark>/usr/share/backgrounds/lyra/lyra-citadel.png</filename-dark><options>zoom</options></wallpaper>
+  <wallpaper deleted="false"><name>Lyra OS — Maelstrom</name><filename>/usr/share/backgrounds/lyra/lyra-maelstrom.png</filename><filename-dark>/usr/share/backgrounds/lyra/lyra-maelstrom.png</filename-dark><options>zoom</options></wallpaper>
+  <wallpaper deleted="false"><name>Lyra OS — Moonlit Shore</name><filename>/usr/share/backgrounds/lyra/lyra-moonlit-shore.png</filename><filename-dark>/usr/share/backgrounds/lyra/lyra-moonlit-shore.png</filename-dark><options>zoom</options></wallpaper>
+  <wallpaper deleted="false"><name>Lyra OS — Dawn</name><filename>/usr/share/backgrounds/lyra/lyra-dawn.png</filename><filename-dark>/usr/share/backgrounds/lyra/lyra-dawn.png</filename-dark><options>zoom</options></wallpaper>
+  <wallpaper deleted="false"><name>Lyra OS — Titan</name><filename>/usr/share/backgrounds/lyra/lyra-titan.png</filename><filename-dark>/usr/share/backgrounds/lyra/lyra-titan.png</filename-dark><options>zoom</options></wallpaper>
+  <wallpaper deleted="false"><name>Lyra OS — Spirits</name><filename>/usr/share/backgrounds/lyra/lyra-spirits.png</filename><filename-dark>/usr/share/backgrounds/lyra/lyra-spirits.png</filename-dark><options>zoom</options></wallpaper>
+  <wallpaper deleted="false"><name>Lyra OS — Vortex</name><filename>/usr/share/backgrounds/lyra/lyra-vortex.png</filename><filename-dark>/usr/share/backgrounds/lyra/lyra-vortex.png</filename-dark><options>zoom</options></wallpaper>
+  <wallpaper deleted="false"><name>Lyra OS — Leviathan</name><filename>/usr/share/backgrounds/lyra/lyra-leviathan.png</filename><filename-dark>/usr/share/backgrounds/lyra/lyra-leviathan.png</filename-dark><options>zoom</options></wallpaper>
 </wallpapers>
