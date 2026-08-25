@@ -11,7 +11,7 @@ plymouth=1
 gdm=1
 full_theme=0
 
-# i18n: this script runs standalone via `curl ... | bash`, so message
+# i18n: this script can run from a reviewed checkout, so message
 # catalogs are embedded here rather than sourced from the repo, which is
 # only fetched later. Locale comes from LYRA_LANG, falling back to the
 # usual LC_ALL/LC_MESSAGES/LANG chain, and defaults to en_US when none of

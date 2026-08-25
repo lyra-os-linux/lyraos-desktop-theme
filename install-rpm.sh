@@ -5,7 +5,7 @@ repo_alias='home_rodrigosbrito_lyra'
 repo_url='https://download.opensuse.org/repositories/home:/rodrigosbrito:/lyra/openSUSE_Leap_16.0/'
 variant=dark
 
-# i18n: this script runs standalone via `curl ... | bash`, so message
+# i18n: this script can run from a reviewed checkout, so message
 # catalogs are embedded here rather than sourced from the repo. Locale
 # comes from LYRA_LANG, falling back to the usual LC_ALL/LC_MESSAGES/LANG
 # chain, and defaults to en_US when none of them match a supported locale.

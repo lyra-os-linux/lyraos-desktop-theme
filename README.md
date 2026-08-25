@@ -17,19 +17,21 @@ wallpapers Lyra OS.
 
 ## Instalação rápida
 
-Revise o [install.sh](install.sh) antes de executá-lo. Requer openSUSE
-(`zypper`). Para usar Adwaita escuro com ícones e wallpaper Lyra OS:
+Clone o repositório e revise o [install.sh](install.sh) antes de executá-lo.
+Requer openSUSE (`zypper`). Para usar Adwaita escuro com ícones e wallpaper
+Lyra OS:
 
 ```bash
-curl --proto '=https' --tlsv1.2 -fsSL \
-  https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/install.sh | bash
+git clone https://github.com/lyra-os-linux/lyraos-desktop-theme.git
+cd lyraos-desktop-theme
+less install.sh
+bash install.sh
 ```
 
 Variante light:
 
 ```bash
-curl --proto '=https' --tlsv1.2 -fsSL \
-  https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/install.sh | bash -s -- --light
+bash install.sh --light
 ```
 
 ### Instalação pelos pacotes RPM
@@ -39,15 +41,14 @@ os ícones, wallpapers, GRUB, Plymouth, o GDM e as configurações do Fastfetch 
 Neofetch:
 
 ```bash
-curl --proto '=https' --tlsv1.2 -fsSL \
-  https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/install-rpm.sh | bash
+less install-rpm.sh
+bash install-rpm.sh
 ```
 
 Para usar a variante clara:
 
 ```bash
-curl --proto '=https' --tlsv1.2 -fsSL \
-  https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/install-rpm.sh | bash -s -- --light
+bash install-rpm.sh --light
 ```
 
 O instalador instala as dependências via `zypper`, compila os arquivos,
@@ -65,9 +66,7 @@ pt-BR, en-US e es, seguindo o idioma do ambiente (`LANG`/`LC_ALL`/
 `LYRA_LANG`:
 
 ```bash
-curl --proto '=https' --tlsv1.2 -fsSL \
-  https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/install.sh | \
-  LYRA_LANG=es bash
+LYRA_LANG=es bash install.sh
 ```
 
 ### Opções
@@ -91,8 +90,7 @@ curl --proto '=https' --tlsv1.2 -fsSL \
 Exemplo para instalar sem ativação automática:
 
 ```bash
-curl --proto '=https' --tlsv1.2 -fsSL \
-  https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/install.sh | bash -s -- --no-activate
+bash install.sh --no-activate
 ```
 
 ## Requisitos
@@ -112,7 +110,7 @@ O instalador resolve esses pacotes automaticamente via `zypper`.
 
 ```bash
 git clone https://github.com/lyra-os-linux/lyraos-desktop-theme.git
-cd Lyra-Theme
+cd lyraos-desktop-theme
 ./scripts/build.sh
 ./scripts/build-icons.sh
 ./scripts/package.sh
@@ -344,8 +342,7 @@ packaging/       especificações RPM
 ## Desinstalação
 
 ```bash
-curl --proto '=https' --tlsv1.2 -fsSL \
-  https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/install.sh | bash -s -- --uninstall
+bash install.sh --uninstall
 ```
 
 ## Licenças
