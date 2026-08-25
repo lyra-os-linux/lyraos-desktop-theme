@@ -42,11 +42,6 @@
     <path d="M1660 300l4 13 13 4-13 4-4 13-4-13-13-4 13-4Z"/>
     <path d="M3560 1120l5 16 16 5-16 5-5 16-5-16-16-5 16-5Z"/>
   </g>
-  <g transform="translate(2920 90)">
-    <rect width="780" height="170" rx="24" fill="#d71920"/>
-    <text x="390" y="116" fill="#ffffff" font-family="sans-serif" font-size="92"
-          font-weight="700" letter-spacing="6" text-anchor="middle">Alpha 6</text>
-  </g>
   <g transform="translate(3300 1650) scale(2)" opacity="@ENT_WATERMARK_OPACITY@">
     <path fill="url(#lyraMark)" d="M104 190A140 140 0 0 0 199 56 96 96 0 0 1 104 190Z"/>
     <path fill="none" stroke="url(#lyraMark)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"
