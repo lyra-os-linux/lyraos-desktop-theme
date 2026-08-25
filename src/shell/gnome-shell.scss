@@ -2,7 +2,7 @@
 stage { color: $ent-text; }
 
 #panel {
-  background-color: $ent-bg;
+  background-color: $ent-panel-bg;
   color: $ent-text;
   border-bottom: 1px solid $ent-panel-border;
   box-shadow: none;
@@ -64,8 +64,15 @@ stage { color: $ent-text; }
 .slider { -barlevel-background-color: $ent-border; -barlevel-active-background-color: $ent-accent; -barlevel-border-color: transparent; }
 
 #overviewGroup, .overview-controls { background-color: $ent-overview; }
-#dash { background-color: $ent-surface; border: 1px solid $ent-border; border-radius: 8px; box-shadow: none; }
-.dash-background { background-color: $ent-surface; border-radius: 8px; }
+#dash {
+  background-color: $ent-panel-bg;
+  color: $ent-text;
+  border: 1px solid $ent-panel-border;
+  border-radius: 8px;
+  box-shadow: none;
+}
+.dash-background { background-color: $ent-panel-bg; border-radius: 8px; }
+.dash-item-container, .dash-item-container .overview-icon { color: $ent-text; }
 .dash-item-container .app-well-app-running-dot {
   background-color: $ent-accent;
   width: 18px;
