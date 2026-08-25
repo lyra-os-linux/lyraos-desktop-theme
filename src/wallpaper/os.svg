@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="3840" height="2160" viewBox="0 0 3840 2160">
   <title>Lyra OS</title>
-  <desc>Flat angular corporate wallpaper for Lyra OS, with an aurora brand glow. Depicts the "Odisseia" journey: a boat sailing a route past four waypoints (Sirens, Cyclops, Scylla and Charybdis, Calypso) toward home.</desc>
+  <desc>Flat angular corporate wallpaper for Lyra OS, with an aurora brand glow. Depicts the "Odisseia" journey: a boat sailing a route past five waypoints (Sirens, Cyclops, Circe, Scylla and Charybdis, Calypso) toward home.</desc>
   <defs>
     <linearGradient id="lyraMark" gradientUnits="userSpaceOnUse" x1="60" y1="0" x2="210" y2="200">
       <stop offset="0%" stop-color="@ENT_BRAND_START@"/>
@@ -43,13 +43,13 @@
     <path d="M3560 1120l5 16 16 5-16 5-5 16-5-16-16-5 16-5Z"/>
   </g>
 
-  <!-- Odisseia: rota do barco entre os quatro marcos da jornada, até o
-       ponto de chegada junto à marca d'água (o "porto" de origem/casa). -->
+  <!-- Odisseia: rota do barco entre os marcos da jornada, até o ponto de
+       chegada junto à marca d'água (o "porto" de origem/casa). -->
   <path fill="none" stroke="@ENT_BORDER@" stroke-width="3" stroke-dasharray="18 16" opacity="0.4"
-        d="M260 1780C480 1340 640 840 860 640C1120 440 1500 340 1780 340C2060 340 2260 500 2450 720C2650 940 2840 1000 3000 1120C3140 1230 3230 1420 3300 1650"/>
+        d="M260 1780C480 1340 640 840 860 640C1120 440 1460 360 1780 340C1980 330 2020 400 2100 480C2220 600 2360 660 2450 720C2650 940 2840 1000 3000 1120C3140 1230 3230 1420 3300 1650"/>
 
   <!-- Sereias: canto que tenta desviar os navegantes -->
-  <g transform="translate(860 640) scale(2.1)" opacity="0.7">
+  <g transform="translate(860 640) scale(3)" opacity="0.72">
     <path fill="none" stroke="url(#lyraMark)" stroke-width="8" stroke-linecap="round"
           d="M-26 32C-36 8 -30 -20 -8 -34"/>
     <path fill="none" stroke="url(#lyraMark)" stroke-width="8" stroke-linecap="round"
@@ -61,13 +61,21 @@
   </g>
 
   <!-- Ciclope: o olho único de Polifemo -->
-  <g transform="translate(1780 340) scale(1.7)" opacity="0.6">
+  <g transform="translate(1780 340) scale(3.2)" opacity="0.72">
     <path fill="url(#lyraMark)" fill-rule="evenodd"
           d="M-36 0C-17 -22 17 -22 36 0C17 22 -17 22 -36 0Z M0 -12A12 12 0 1 0 0 12A12 12 0 1 0 0 -12Z"/>
   </g>
 
+  <!-- Circe: a feiticeira e o cálice que transforma os navegantes -->
+  <g transform="translate(2100 480) scale(2.5)" opacity="0.72">
+    <path fill="url(#lyraMark)" d="M-22 -34C-22 -12 -12 4 0 4C12 4 22 -12 22 -34Z"/>
+    <path fill="url(#lyraMark)" d="M-4 4h8v20h-8z"/>
+    <path fill="url(#lyraMark)" d="M-18 24h36v9h-36z"/>
+    <path fill="url(#lyraMark)" d="M28 -46l4 13 13 4-13 4-4 13-4-13-13-4 13-4Z"/>
+  </g>
+
   <!-- Cila e Caríbdis: a passagem mais estreita e perigosa -->
-  <g transform="translate(2450 720) scale(1.6)" opacity="0.55">
+  <g transform="translate(2450 720) scale(3.3)" opacity="0.72">
     <path fill="url(#lyraMark)" fill-rule="evenodd"
           d="M0 -34A34 34 0 1 0 0 34A34 34 0 1 0 0 -34Z M0 -18A18 18 0 1 1 0 18A18 18 0 1 1 0 -18Z"/>
   </g>
