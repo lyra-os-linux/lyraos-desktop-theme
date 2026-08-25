@@ -45,7 +45,7 @@ GRUB 2, a matching Plymouth boot splash theme, plus Fastfetch and Neofetch
 configs with a Lyra ascii logo.
 
 %prep
-%setup -q -c -n lyra-theme-src-%{version}
+%setup -q -n lyra-theme-src-%{version}
 
 %build
 ./scripts/build.sh

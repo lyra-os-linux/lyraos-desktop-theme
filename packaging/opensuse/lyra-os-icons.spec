@@ -15,7 +15,7 @@ Icon theme for Lyra OS. It provides branded vector icons for common
 places, devices and applications and inherits Adwaita for complete GNOME coverage.
 
 %prep
-%setup -q -c -n lyra-theme-src-%{version}
+%setup -q -n lyra-theme-src-%{version}
 
 %build
 ./scripts/build-icons.sh
