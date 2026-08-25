@@ -59,6 +59,17 @@ logo ascii da Lyra para o perfil atual. Configurações existentes recebem um
 backup antes da substituição. A senha administrativa é solicitada diretamente
 pelo terminal.
 
+As mensagens de `install.sh` e `install-rpm.sh` estão disponíveis em
+pt-BR, en-US e es, seguindo o idioma do ambiente (`LANG`/`LC_ALL`/
+`LC_MESSAGES`) com fallback para en-US. Para forçar um idioma, defina
+`LYRA_LANG`:
+
+```bash
+curl --proto '=https' --tlsv1.2 -fsSL \
+  https://raw.githubusercontent.com/lyra-os-linux/lyraos-desktop-theme/main/install.sh | \
+  LYRA_LANG=es bash
+```
+
 ### Opções
 
 ```text

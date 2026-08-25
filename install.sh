@@ -11,26 +11,182 @@ plymouth=1
 gdm=1
 full_theme=0
 
+# i18n: this script runs standalone via `curl ... | bash`, so message
+# catalogs are embedded here rather than sourced from the repo, which is
+# only fetched later. Locale comes from LYRA_LANG, falling back to the
+# usual LC_ALL/LC_MESSAGES/LANG chain, and defaults to en_US when none of
+# them match a supported locale. Lookups go through associative arrays
+# (never eval) so translated text is always treated as data, not code.
+lyra_locale() {
+  local loc=${LYRA_LANG:-${LC_ALL:-${LC_MESSAGES:-${LANG:-}}}}
+  loc=${loc%%.*}
+  loc=${loc%%@*}
+  case $loc in
+    pt_BR|pt) printf 'pt_BR\n' ;;
+    es|es_*) printf 'es\n' ;;
+    *) printf 'en_US\n' ;;
+  esac
+}
+
+declare -A MSG_EN_US=(
+  [app_title]="Lyra OS installer"
+  [usage_label]="Usage:"
+  [opt_dark]="Use dark Adwaita with Lyra OS icons (default)"
+  [opt_light]="Use light Adwaita with Lyra OS icons"
+  [opt_no_activate]="Install files without changing GNOME, GRUB or Plymouth settings, the GDM login screen, or the neofetch config"
+  [opt_no_grub]="Skip installing and activating the GRUB theme entirely"
+  [opt_no_plymouth]="Skip installing and activating the Plymouth theme entirely"
+  [opt_no_gdm]="Skip theming the GDM login screen entirely"
+  [opt_full_theme]="Also style window chrome (GTK 3/4 headerbars) and the GNOME Shell top bar/overview with Lyra OS, instead of leaving Adwaita's own chrome in place. This can break the look of GNOME Shell's Quick Settings on some versions."
+  [opt_uninstall]="Remove both themes and restore GNOME defaults"
+  [unknown_option]="Unknown option: %s"
+  [err_sudo_required]="sudo is required"
+  [warn_grub_mkconfig_missing]="grub2-mkconfig not found; regenerate grub.cfg manually"
+  [info_admin_auth]="Administrator authentication is required"
+  [info_removing]="Removing Lyra OS"
+  [info_uninstall_complete]="Uninstall complete"
+  [info_installing_deps]="Installing build and runtime dependencies"
+  [err_opensuse_only]="This installer supports openSUSE (zypper) only."
+  [err_curl_missing]="curl was not installed"
+  [err_magick_missing]="ImageMagick 7 (magick) is required"
+  [err_node_missing]="Node.js is required"
+  [err_rsvg_missing]="rsvg-convert is required"
+  [err_sassc_missing]="sassc is required"
+  [info_downloading]="Downloading %s (%s)"
+  [info_building]="Building theme, icons, wallpapers, GRUB theme and Plymouth theme"
+  [info_installing_files]="Installing system files"
+  [info_installing_neofetch]="Installing Lyra neofetch config"
+  [info_installing_fastfetch]="Installing Lyra Fastfetch config"
+  [info_activating_adwaita]="Activating Adwaita with Lyra OS icons"
+  [info_activating_full_theme]="Activating Lyra OS window and Shell styling (may affect GNOME Quick Settings)"
+  [info_activating_grub]="Activating Lyra OS for GRUB"
+  [warn_grub_not_activated]="/etc/default/grub not found; GRUB theme was installed but not activated"
+  [info_activating_plymouth]="Activating Lyra OS for Plymouth"
+  [warn_plymouth_not_activated]="plymouth-set-default-theme not found; Plymouth theme was installed but not activated"
+  [info_activating_gdm]="Activating Lyra OS for GDM"
+  [warn_gdm_not_activated]="dconf not found; GDM theme was not activated"
+  [info_install_complete]="Lyra OS installation complete"
+  [info_full_theme_note]="Lyra OS styles GNOME Shell chrome and application windows. Log out and back in for the Shell theme to fully apply."
+  [info_adwaita_note]="Adwaita remains active for GNOME Shell and applications; Lyra supplies the icons."
+)
+
+declare -A MSG_PT_BR=(
+  [app_title]="Instalador do Lyra OS"
+  [usage_label]="Uso:"
+  [opt_dark]="Usa o Adwaita escuro com os ícones do Lyra OS (padrão)"
+  [opt_light]="Usa o Adwaita claro com os ícones do Lyra OS"
+  [opt_no_activate]="Instala os arquivos sem alterar as configurações do GNOME, GRUB, Plymouth, a tela de login do GDM ou o neofetch"
+  [opt_no_grub]="Não instala nem ativa o tema do GRUB"
+  [opt_no_plymouth]="Não instala nem ativa o tema do Plymouth"
+  [opt_no_gdm]="Não aplica o tema na tela de login do GDM"
+  [opt_full_theme]="Também estiliza os contornos das janelas (headerbars do GTK 3/4) e a barra superior/visão geral do GNOME Shell com o Lyra OS, em vez de manter o visual do Adwaita. Isso pode quebrar a aparência das Configurações Rápidas em algumas versões do GNOME."
+  [opt_uninstall]="Remove os dois temas e restaura os padrões do GNOME"
+  [unknown_option]="Opção desconhecida: %s"
+  [err_sudo_required]="sudo é necessário"
+  [warn_grub_mkconfig_missing]="grub2-mkconfig não encontrado; regenere o grub.cfg manualmente"
+  [info_admin_auth]="É necessária autenticação de administrador"
+  [info_removing]="Removendo o Lyra OS"
+  [info_uninstall_complete]="Desinstalação concluída"
+  [info_installing_deps]="Instalando dependências de build e execução"
+  [err_opensuse_only]="Este instalador é compatível apenas com openSUSE (zypper)."
+  [err_curl_missing]="curl não foi instalado"
+  [err_magick_missing]="ImageMagick 7 (magick) é necessário"
+  [err_node_missing]="Node.js é necessário"
+  [err_rsvg_missing]="rsvg-convert é necessário"
+  [err_sassc_missing]="sassc é necessário"
+  [info_downloading]="Baixando %s (%s)"
+  [info_building]="Compilando tema, ícones, wallpapers, tema do GRUB e do Plymouth"
+  [info_installing_files]="Instalando arquivos do sistema"
+  [info_installing_neofetch]="Instalando a configuração do Lyra para o neofetch"
+  [info_installing_fastfetch]="Instalando a configuração do Lyra para o Fastfetch"
+  [info_activating_adwaita]="Ativando o Adwaita com os ícones do Lyra OS"
+  [info_activating_full_theme]="Ativando o estilo de janelas e do Shell do Lyra OS (pode afetar as Configurações Rápidas do GNOME)"
+  [info_activating_grub]="Ativando o Lyra OS no GRUB"
+  [warn_grub_not_activated]="/etc/default/grub não encontrado; o tema do GRUB foi instalado, mas não ativado"
+  [info_activating_plymouth]="Ativando o Lyra OS no Plymouth"
+  [warn_plymouth_not_activated]="plymouth-set-default-theme não encontrado; o tema do Plymouth foi instalado, mas não ativado"
+  [info_activating_gdm]="Ativando o Lyra OS no GDM"
+  [warn_gdm_not_activated]="dconf não encontrado; o tema do GDM não foi ativado"
+  [info_install_complete]="Instalação do Lyra OS concluída"
+  [info_full_theme_note]="O Lyra OS estiliza o Shell do GNOME e as janelas dos aplicativos. Saia e entre novamente na sessão para o tema do Shell ser aplicado por completo."
+  [info_adwaita_note]="O Adwaita continua ativo no Shell do GNOME e nos aplicativos; o Lyra fornece os ícones."
+)
+
+declare -A MSG_ES=(
+  [app_title]="Instalador de Lyra OS"
+  [usage_label]="Uso:"
+  [opt_dark]="Usa Adwaita oscuro con los íconos de Lyra OS (predeterminado)"
+  [opt_light]="Usa Adwaita claro con los íconos de Lyra OS"
+  [opt_no_activate]="Instala los archivos sin cambiar la configuración de GNOME, GRUB, Plymouth, la pantalla de inicio de GDM ni neofetch"
+  [opt_no_grub]="Omite instalar y activar por completo el tema de GRUB"
+  [opt_no_plymouth]="Omite instalar y activar por completo el tema de Plymouth"
+  [opt_no_gdm]="Omite aplicar el tema en la pantalla de inicio de GDM"
+  [opt_full_theme]="También estiliza los bordes de ventana (headerbars de GTK 3/4) y la barra superior/vista general de GNOME Shell con Lyra OS, en vez de mantener el aspecto propio de Adwaita. Esto puede romper la apariencia de la Configuración rápida en algunas versiones de GNOME."
+  [opt_uninstall]="Elimina ambos temas y restaura los valores predeterminados de GNOME"
+  [unknown_option]="Opción desconocida: %s"
+  [err_sudo_required]="se requiere sudo"
+  [warn_grub_mkconfig_missing]="no se encontró grub2-mkconfig; regenere grub.cfg manualmente"
+  [info_admin_auth]="Se requiere autenticación de administrador"
+  [info_removing]="Eliminando Lyra OS"
+  [info_uninstall_complete]="Desinstalación completa"
+  [info_installing_deps]="Instalando dependencias de compilación y ejecución"
+  [err_opensuse_only]="Este instalador solo es compatible con openSUSE (zypper)."
+  [err_curl_missing]="curl no se instaló"
+  [err_magick_missing]="se requiere ImageMagick 7 (magick)"
+  [err_node_missing]="se requiere Node.js"
+  [err_rsvg_missing]="se requiere rsvg-convert"
+  [err_sassc_missing]="se requiere sassc"
+  [info_downloading]="Descargando %s (%s)"
+  [info_building]="Compilando tema, íconos, fondos de pantalla, tema de GRUB y de Plymouth"
+  [info_installing_files]="Instalando archivos del sistema"
+  [info_installing_neofetch]="Instalando la configuración de Lyra para neofetch"
+  [info_installing_fastfetch]="Instalando la configuración de Lyra para Fastfetch"
+  [info_activating_adwaita]="Activando Adwaita con los íconos de Lyra OS"
+  [info_activating_full_theme]="Activando el estilo de ventanas y del Shell de Lyra OS (puede afectar la Configuración rápida de GNOME)"
+  [info_activating_grub]="Activando Lyra OS en GRUB"
+  [warn_grub_not_activated]="no se encontró /etc/default/grub; el tema de GRUB se instaló pero no se activó"
+  [info_activating_plymouth]="Activando Lyra OS en Plymouth"
+  [warn_plymouth_not_activated]="no se encontró plymouth-set-default-theme; el tema de Plymouth se instaló pero no se activó"
+  [info_activating_gdm]="Activando Lyra OS en GDM"
+  [warn_gdm_not_activated]="no se encontró dconf; el tema de GDM no se activó"
+  [info_install_complete]="Instalación de Lyra OS completa"
+  [info_full_theme_note]="Lyra OS estiliza el Shell de GNOME y las ventanas de las aplicaciones. Cierre sesión y vuelva a iniciarla para que el tema del Shell se aplique por completo."
+  [info_adwaita_note]="Adwaita permanece activo en el Shell de GNOME y en las aplicaciones; Lyra aporta los íconos."
+)
+
+case $(lyra_locale) in
+  pt_BR) declare -n MSG=MSG_PT_BR ;;
+  es) declare -n MSG=MSG_ES ;;
+  *) declare -n MSG=MSG_EN_US ;;
+esac
+
+msg() { printf '%s' "${MSG[$1]:-${MSG_EN_US[$1]:-$1}}"; }
+
+say() {
+  local key=$1; shift || true
+  # shellcheck disable=SC2059
+  printf "\033[1;34m==>\033[0m $(msg "$key")\n" "$@"
+}
+
+die() {
+  local key=$1; shift || true
+  # shellcheck disable=SC2059
+  printf "\033[1;31merror:\033[0m $(msg "$key")\n" "$@" >&2
+  exit 1
+}
+
 usage() {
-  cat <<'EOF'
-Lyra OS installer
-
-Usage: install.sh [--dark|--light] [--no-activate] [--no-grub]
-                   [--no-plymouth] [--no-gdm] [--full-theme] [--uninstall]
-
-  --dark          Use dark Adwaita with Lyra OS icons (default)
-  --light         Use light Adwaita with Lyra OS icons
-  --no-activate   Install files without changing GNOME, GRUB or Plymouth
-                   settings, the GDM login screen, or the neofetch config
-  --no-grub       Skip installing and activating the GRUB theme entirely
-  --no-plymouth   Skip installing and activating the Plymouth theme entirely
-  --no-gdm        Skip theming the GDM login screen entirely
-  --full-theme    Also style window chrome (GTK 3/4 headerbars) and the
-                   GNOME Shell top bar/overview with Lyra OS, instead of
-                   leaving Adwaita's own chrome in place. This can break the
-                   look of GNOME Shell's Quick Settings on some versions.
-  --uninstall     Remove both themes and restore GNOME defaults
-EOF
+  printf '%s\n\n' "$(msg app_title)"
+  printf '%s install.sh [--dark|--light] [--no-activate] [--no-grub]\n' "$(msg usage_label)"
+  printf '                   [--no-plymouth] [--no-gdm] [--full-theme] [--uninstall]\n\n'
+  printf '  --dark          %s\n' "$(msg opt_dark)"
+  printf '  --light         %s\n' "$(msg opt_light)"
+  printf '  --no-activate   %s\n' "$(msg opt_no_activate)"
+  printf '  --no-grub       %s\n' "$(msg opt_no_grub)"
+  printf '  --no-plymouth   %s\n' "$(msg opt_no_plymouth)"
+  printf '  --no-gdm        %s\n' "$(msg opt_no_gdm)"
+  printf '  --full-theme    %s\n' "$(msg opt_full_theme)"
+  printf '  --uninstall     %s\n' "$(msg opt_uninstall)"
 }
 
 while (($#)); do
@@ -44,13 +200,10 @@ while (($#)); do
     --full-theme) full_theme=1 ;;
     --uninstall) uninstall=1 ;;
     -h|--help) usage; exit 0 ;;
-    *) printf 'Unknown option: %s\n' "$1" >&2; usage >&2; exit 2 ;;
+    *) printf -- "$(msg unknown_option)\n" "$1" >&2; usage >&2; exit 2 ;;
   esac
   shift
 done
-
-say() { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
-die() { printf '\033[1;31merror:\033[0m %s\n' "$*" >&2; exit 1; }
 
 # openSUSE ships GRUB 2 as grub2, configured via /boot/grub2/grub.cfg.
 rebuild_grub_config() {
@@ -59,18 +212,18 @@ rebuild_grub_config() {
   elif [[ -x /usr/sbin/grub2-mkconfig ]]; then
     sudo /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
   else
-    say 'grub2-mkconfig not found; regenerate grub.cfg manually'
+    say warn_grub_mkconfig_missing
   fi
 }
 
-command -v sudo >/dev/null 2>&1 || die 'sudo is required'
+command -v sudo >/dev/null 2>&1 || die err_sudo_required
 if ! sudo -n true 2>/dev/null; then
-  say 'Administrator authentication is required'
+  say info_admin_auth
   sudo -v </dev/tty
 fi
 
 if ((uninstall)); then
-  say 'Removing Lyra OS'
+  say info_removing
   sudo rm -rf /usr/share/themes/Lyra-OS \
     /usr/share/themes/Lyra-OS-Light \
     /usr/share/icons/Lyra-OS-Icons \
@@ -139,13 +292,13 @@ if ((uninstall)); then
       rm -f "$HOME/.config/fastfetch/config.jsonc"
     fi
   fi
-  say 'Uninstall complete'
+  say info_uninstall_complete
   exit 0
 fi
 
 install_dependencies() {
-  say 'Installing build and runtime dependencies'
-  command -v zypper >/dev/null 2>&1 || die 'This installer supports openSUSE (zypper) only.'
+  say info_installing_deps
+  command -v zypper >/dev/null 2>&1 || die err_opensuse_only
   local packages=(
     adwaita-icon-theme curl fastfetch glib2-tools gtk3-tools gzip
     ImageMagick nodejs rsvg-convert sassc tar xz
@@ -160,11 +313,11 @@ install_dependencies() {
 }
 
 install_dependencies
-command -v curl >/dev/null 2>&1 || die 'curl was not installed'
-command -v magick >/dev/null 2>&1 || die 'ImageMagick 7 (magick) is required'
-command -v node >/dev/null 2>&1 || die 'Node.js is required'
-command -v rsvg-convert >/dev/null 2>&1 || die 'rsvg-convert is required'
-command -v sassc >/dev/null 2>&1 || die 'sassc is required'
+command -v curl >/dev/null 2>&1 || die err_curl_missing
+command -v magick >/dev/null 2>&1 || die err_magick_missing
+command -v node >/dev/null 2>&1 || die err_node_missing
+command -v rsvg-convert >/dev/null 2>&1 || die err_rsvg_missing
+command -v sassc >/dev/null 2>&1 || die err_sassc_missing
 
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
@@ -172,15 +325,15 @@ archive="$tmp/source.tar.gz"
 source_dir="$tmp/source"
 mkdir -p "$source_dir"
 
-say "Downloading $repo ($ref)"
+say info_downloading "$repo" "$ref"
 curl --proto '=https' --tlsv1.2 -fsSL \
   "https://github.com/$repo/archive/$ref.tar.gz" -o "$archive"
 tar -xzf "$archive" -C "$source_dir" --strip-components=1
 
-say 'Building theme, icons, wallpapers, GRUB theme and Plymouth theme'
+say info_building
 (cd "$source_dir" && ./scripts/build.sh && ./scripts/build-icons.sh && ./scripts/build-wallpaper-variants.sh)
 
-say 'Installing system files'
+say info_installing_files
 sudo install -d /usr/share/themes /usr/share/icons \
   /usr/share/backgrounds/lyra /usr/share/gnome-background-properties \
   /usr/share/lyra-os-theme/fastfetch /usr/share/lyra-os-theme/gdm
@@ -212,7 +365,7 @@ command -v gtk-update-icon-cache >/dev/null 2>&1 && \
   sudo gtk-update-icon-cache -f /usr/share/icons/Lyra-OS-Icons >/dev/null || true
 
 if ((activate)); then
-  say 'Installing Lyra neofetch config'
+  say info_installing_neofetch
   mkdir -p "$HOME/.config/neofetch"
   if [[ -f "$HOME/.config/neofetch/config.conf" && \
       ! -f "$HOME/.config/neofetch/config.conf.lyra-theme-backup" ]]; then
@@ -221,7 +374,7 @@ if ((activate)); then
   fi
   cp "$source_dir/dist/neofetch/config.conf" "$HOME/.config/neofetch/config.conf"
 
-  say 'Installing Lyra Fastfetch config'
+  say info_installing_fastfetch
   mkdir -p "$HOME/.config/fastfetch"
   if [[ -f "$HOME/.config/fastfetch/config.jsonc" && \
       ! -f "$HOME/.config/fastfetch/config.jsonc.lyra-theme-backup" ]]; then
@@ -240,7 +393,7 @@ if ((activate)) && command -v gsettings >/dev/null 2>&1; then
     scheme=prefer-dark
     shell_gtk_theme=Lyra-OS
   fi
-  say 'Activating Adwaita with Lyra OS icons'
+  say info_activating_adwaita
   gsettings reset org.gnome.shell.extensions.user-theme name 2>/dev/null || true
   gsettings reset org.gnome.desktop.interface gtk-theme 2>/dev/null || true
   gsettings set org.gnome.desktop.interface icon-theme 'Lyra-OS-Icons'
@@ -263,7 +416,7 @@ if ((activate)) && command -v gsettings >/dev/null 2>&1; then
       "$(sed -E "s/'$uuid', //; s/, '$uuid'//; s/'$uuid'//" <<<"$current")"
   fi
   if ((full_theme)); then
-    say 'Activating Lyra OS window and Shell styling (may affect GNOME Quick Settings)'
+    say info_activating_full_theme
     gsettings set org.gnome.desktop.interface gtk-theme "$shell_gtk_theme"
     mkdir -p "$HOME/.config/gtk-4.0"
     if [[ -f "$HOME/.config/gtk-4.0/gtk.css" && \
@@ -290,7 +443,7 @@ fi
 
 if ((activate)) && ((grub)); then
   if [[ -f /etc/default/grub ]]; then
-    say 'Activating Lyra OS for GRUB'
+    say info_activating_grub
     if ! sudo grep -qx 'GRUB_THEME="/usr/share/grub/themes/Lyra-OS/theme.txt"' /etc/default/grub; then
       sudo sh -c "grep '^[[:space:]]*GRUB_THEME=' /etc/default/grub > /etc/default/grub.lyra-theme-backup || true"
     fi
@@ -299,25 +452,25 @@ if ((activate)) && ((grub)); then
       sudo tee -a /etc/default/grub >/dev/null
     rebuild_grub_config
   else
-    say '/etc/default/grub not found; GRUB theme was installed but not activated'
+    say warn_grub_not_activated
   fi
 fi
 
 if ((activate)) && ((plymouth)); then
   if command -v plymouth-set-default-theme >/dev/null 2>&1; then
-    say 'Activating Lyra OS for Plymouth'
+    say info_activating_plymouth
     if [[ ! -s /etc/plymouth/lyra-theme-backup ]]; then
       plymouth-set-default-theme 2>/dev/null | sudo tee /etc/plymouth/lyra-theme-backup >/dev/null || true
     fi
     sudo plymouth-set-default-theme -R Lyra-OS
   else
-    say 'plymouth-set-default-theme not found; Plymouth theme was installed but not activated'
+    say warn_plymouth_not_activated
   fi
 fi
 
 if ((activate)) && ((gdm)); then
   if command -v dconf >/dev/null 2>&1; then
-    say 'Activating Lyra OS for GDM'
+    say info_activating_gdm
     shell_theme=Lyra-OS
     scheme=prefer-dark
     if [[ $variant == light ]]; then
@@ -352,13 +505,13 @@ fallback-logo=''
 EOF
     sudo dconf update
   else
-    say 'dconf not found; GDM theme was not activated'
+    say warn_gdm_not_activated
   fi
 fi
 
-say 'Lyra OS installation complete'
+say info_install_complete
 if ((activate)) && ((full_theme)); then
-  printf 'Lyra OS styles GNOME Shell chrome and application windows. Log out and back in for the Shell theme to fully apply.\n'
+  printf '%s\n' "$(msg info_full_theme_note)"
 else
-  printf 'Adwaita remains active for GNOME Shell and applications; Lyra supplies the icons.\n'
+  printf '%s\n' "$(msg info_adwaita_note)"
 fi
