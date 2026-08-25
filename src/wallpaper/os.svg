@@ -19,6 +19,11 @@
     <filter id="auroraBlur" x="-60%" y="-60%" width="220%" height="220%">
       <feGaussianBlur stdDeviation="170"/>
     </filter>
+    <linearGradient id="bodyShade" gradientUnits="objectBoundingBox" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="@ENT_TEXT@" stop-opacity="0.22"/>
+      <stop offset="45%" stop-color="@ENT_TEXT@" stop-opacity="0"/>
+      <stop offset="100%" stop-color="@ENT_BG@" stop-opacity="0.4"/>
+    </linearGradient>
   </defs>
   <rect width="3840" height="2160" fill="@ENT_BG@"/>
   <g opacity="@ENT_GLOW_OPACITY@" filter="url(#auroraBlur)">
@@ -53,21 +58,45 @@
     <path fill="@ENT_BORDER@" d="M-13 -32C-16 -14 -14 6 -7 12L7 12C14 6 16 -14 13 -32C13 -44 -13 -44 -13 -32Z"/>
     <path fill="@ENT_BORDER@" d="M-7 12C-20 20 -30 38 -20 58C-9 46 0 32 0 12Z"/>
     <path fill="@ENT_BORDER@" d="M7 12C20 20 30 38 20 58C9 46 0 32 0 12Z"/>
+    <path fill="url(#bodyShade)" d="M-13 -32C-16 -14 -14 6 -7 12L7 12C14 6 16 -14 13 -32C13 -44 -13 -44 -13 -32Z"/>
+    <path fill="url(#bodyShade)" d="M-7 12C-20 20 -30 38 -20 58C-9 46 0 32 0 12Z"/>
+    <path fill="url(#bodyShade)" d="M7 12C20 20 30 38 20 58C9 46 0 32 0 12Z"/>
+    <g fill="none" stroke="@ENT_BORDER@" stroke-width="5" stroke-linecap="round">
+      <path d="M-13 -18C-24 -14 -30 -2 -28 8"/>
+      <path d="M13 -18C24 -14 30 -2 28 8"/>
+    </g>
+    <g fill="none" stroke="url(#lyraMark)" stroke-width="2.5" opacity="0.8">
+      <path d="M-14 24C-8 28 8 28 14 24"/>
+      <path d="M-15 34C-8 39 8 39 15 34"/>
+      <path d="M-13 44C-7 48 7 48 13 44"/>
+    </g>
     <path fill="url(#lyraMark)" d="M-16 -34C-26 -30 -30 -14 -22 -2C-18 -16 -14 -26 -14 -34Z"/>
     <path fill="url(#lyraMark)" d="M16 -34C26 -30 30 -14 22 -2C18 -16 14 -26 14 -34Z"/>
   </g>
 
-  <!-- Ciclope: Polifemo, o gigante de um olho só -->
+  <!-- Ciclope: Polifemo, o gigante de um olho só, com o porrete erguido -->
   <g transform="translate(1780 340) scale(2.7)" opacity="0.78">
+    <path fill="@ENT_BORDER@" d="M-26 44C-34 30 -40 46 -36 58L-20 58C-22 50 -24 46 -26 44Z"/>
+    <path fill="@ENT_BORDER@" d="M26 44C34 30 40 46 36 58L20 58C22 50 24 46 26 44Z"/>
     <path fill="@ENT_BORDER@" d="M-32 42C-42 8 -36 -32 0 -36C36 -32 42 8 32 42Z"/>
+    <path fill="url(#bodyShade)" d="M-32 42C-42 8 -36 -32 0 -36C36 -32 42 8 32 42Z"/>
     <path fill="url(#lyraMark)" fill-rule="evenodd"
           d="M-15 -8C-8 -19 8 -19 15 -8C8 3 -8 3 -15 -8Z M0 -8A6.5 6.5 0 1 0 0.01 -8Z"/>
+    <path fill="none" stroke="@ENT_BORDER@" stroke-width="9" stroke-linecap="round" d="M34 40L50 14"/>
+    <ellipse cx="54" cy="4" rx="9" ry="14" fill="@ENT_BORDER@" transform="rotate(-25 54 4)"/>
   </g>
 
   <!-- Circe: a feiticeira e a taça que transforma os navegantes -->
   <g transform="translate(2100 480) scale(2.7)" opacity="0.78">
     <circle cx="0" cy="-24" r="12" fill="@ENT_BORDER@"/>
     <path fill="@ENT_BORDER@" d="M-20 40C-24 14 -17 -10 0 -10C17 -10 24 14 20 40Z"/>
+    <path fill="url(#bodyShade)" d="M-20 40C-24 14 -17 -10 0 -10C17 -10 24 14 20 40Z"/>
+    <circle cx="0" cy="-24" r="12" fill="url(#bodyShade)"/>
+    <g fill="none" stroke="url(#lyraMark)" stroke-width="2" opacity="0.7">
+      <path d="M-10 -2C-14 10 -13 24 -9 36"/>
+      <path d="M10 -2C14 10 13 24 9 36"/>
+    </g>
+    <circle cx="-4" cy="-25" r="2" fill="@ENT_BG@"/>
     <path fill="none" stroke="url(#lyraMark)" stroke-width="6" stroke-linecap="round" d="M12 -8C22 -14 28 -26 24 -36"/>
     <circle cx="25" cy="-38" r="7" fill="url(#lyraMark)"/>
   </g>
@@ -76,14 +105,18 @@
   <g transform="translate(2450 720) scale(2.5)" opacity="0.78">
     <path fill="url(#lyraMark)" fill-rule="evenodd"
           d="M0 -24A30 30 0 1 0 0 36A30 30 0 1 0 0 -24Z M0 4A16 16 0 1 1 0 36A16 16 0 1 1 0 4Z"/>
+    <g fill="none" stroke="url(#lyraMark)" stroke-width="2" opacity="0.6">
+      <path d="M-18 10C-8 16 8 16 18 10"/>
+      <path d="M-14 22C-6 26 6 26 14 22"/>
+    </g>
     <g fill="none" stroke="@ENT_BORDER@" stroke-width="7" stroke-linecap="round">
       <path d="M-8 4C-16 -16 -10 -36 -20 -50"/>
       <path d="M0 4C0 -20 0 -38 0 -54"/>
       <path d="M8 4C16 -16 10 -36 20 -50"/>
     </g>
-    <circle cx="-20" cy="-50" r="6" fill="url(#lyraMark)"/>
-    <circle cx="0" cy="-54" r="6" fill="url(#lyraMark)"/>
-    <circle cx="20" cy="-50" r="6" fill="url(#lyraMark)"/>
+    <path fill="url(#lyraMark)" d="M-32 -50L-14 -58L-8 -46L-20 -40Z"/>
+    <path fill="url(#lyraMark)" d="M-8 -60L8 -60L6 -46L-6 -46Z"/>
+    <path fill="url(#lyraMark)" d="M32 -50L14 -58L8 -46L20 -40Z"/>
   </g>
 
   <!-- Calipso: a ninfa na última ilha antes do retorno -->
@@ -91,12 +124,15 @@
     <path fill="@ENT_SURFACE@" d="M-32 22L-6 -20L20 22Z"/>
     <circle cx="-6" cy="-32" r="8" fill="url(#lyraMark)"/>
     <path fill="url(#lyraMark)" d="M-14 -24C-17 -14 -15 -2 -10 2L-2 2C3 -2 5 -14 2 -24Z"/>
+    <path fill="url(#bodyShade)" d="M-14 -24C-17 -14 -15 -2 -10 2L-2 2C3 -2 5 -14 2 -24Z"/>
+    <path fill="none" stroke="url(#lyraMark)" stroke-width="3" stroke-linecap="round" d="M2 -10C8 -14 10 -20 8 -26"/>
   </g>
 
   <!-- O barco, em rota entre as Sereias e o Ciclope -->
   <g transform="translate(1400 460) scale(2.2) rotate(-12)" opacity="0.72">
     <path fill="@ENT_BORDER@" stroke="url(#lyraMark)" stroke-width="4" stroke-linejoin="round"
           d="M-52 32L52 32L38 58L-38 58Z"/>
+    <path fill="url(#bodyShade)" d="M-52 32L52 32L38 58L-38 58Z"/>
     <path fill="none" stroke="url(#lyraMark)" stroke-width="6" stroke-linecap="round" d="M0 32V-48"/>
     <path fill="url(#lyraMark)" d="M4 -48L36 16L4 16Z"/>
   </g>
