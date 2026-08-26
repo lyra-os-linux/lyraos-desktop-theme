@@ -37,8 +37,8 @@ bash install.sh --light
 ### Instalação pelos pacotes RPM
 
 Para adicionar o repositório OBS, instalar os RPMs e ativar automaticamente
-os ícones, wallpapers, GRUB, Plymouth, o GDM e as configurações do Fastfetch e
-Neofetch:
+o tema completo das janelas e do Shell, os ícones, wallpapers, GRUB, Plymouth,
+o GDM e as configurações do Fastfetch e Neofetch:
 
 ```bash
 less install-rpm.sh
@@ -53,7 +53,7 @@ bash install-rpm.sh --light
 
 O instalador instala as dependências via `zypper`, compila os arquivos,
 instala tema, ícones, wallpapers, GRUB, Plymouth e a tela de login do GDM,
-ativa Adwaita com os ícones Lyra OS no GNOME, o menu de boot do GRUB,
+ativa o tema completo Lyra OS no GNOME, o menu de boot do GRUB,
 o splash de boot do Plymouth e o tema Lyra OS no GDM (ícones,
 wallpaper e cores do Shell), e copia os configs do Fastfetch e Neofetch com o
 logo ascii da Lyra para o perfil atual. Configurações existentes recebem um
@@ -175,7 +175,7 @@ os controles rápidos das versões atuais do GNOME.
 
 ### Estilo Lyra OS nas janelas e no Shell (`--full-theme`)
 
-Por padrão o instalador não estiliza as janelas nem o Shell — ele só troca os
+Por padrão o instalador baseado no tarball não estiliza as janelas nem o Shell — ele só troca os
 ícones, mantendo o chrome do Adwaita, pelos motivos acima. Os arquivos do tema
 completo (headerbars GTK 3/4 e barra superior/overview do GNOME Shell) já são
 compilados em `dist/Lyra-OS` e `dist/Lyra-OS-Light`; a flag `--full-theme`
@@ -201,6 +201,12 @@ ln -sf /usr/share/themes/Lyra-OS/gtk-4.0/gtk.css ~/.config/gtk-4.0/gtk.css
 Use `Lyra-OS-Light` nos três comandos para a variante clara. Rodar
 `--uninstall` (ou os comandos `gsettings reset`/remover o symlink acima)
 restaura o Adwaita padrão.
+
+O pacote RPM do Lyra OS é voltado à identidade visual da distribuição e aplica
+o tema completo por padrão. Durante uma atualização via `zypper`, sessões GNOME
+abertas são atualizadas imediatamente; usuários desconectados recebem o tema no
+próximo login. O CSS GTK 4 é copiado para o perfil para também alcançar
+aplicativos que não conseguem seguir links para `/usr/share/themes`.
 
 ### Variante clara
 

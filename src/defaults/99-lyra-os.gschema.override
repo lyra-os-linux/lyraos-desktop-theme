@@ -1,4 +1,5 @@
 [org.gnome.desktop.interface]
+gtk-theme='Lyra-OS'
 icon-theme='Lyra-OS-Icons'
 accent-color='blue'
 color-scheme='prefer-dark'

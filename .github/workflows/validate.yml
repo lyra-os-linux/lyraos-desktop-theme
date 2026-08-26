@@ -9,6 +9,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - run: bash -n install.sh
       - run: bash -n install-rpm.sh
+      - run: bash -n src/defaults/lyra-os-apply-full-theme
       - run: ./scripts/test-i18n.sh
       - run: ./scripts/build.sh
       - run: ./scripts/build-wallpaper-variants.sh
@@ -21,6 +22,10 @@ jobs:
             src/defaults/99-lyra-os.gschema.override
           grep -Fqx "picture-uri-dark='file:///usr/share/backgrounds/lyra/lyra-voyage.png'" \
             src/defaults/99-lyra-os.gschema.override
+          grep -Fqx "gtk-theme='Lyra-OS'" \
+            src/defaults/99-lyra-os.gschema.override
+          grep -Fqx 'Exec=/usr/libexec/lyra-os-apply-full-theme' \
+            src/defaults/lyra-os-full-theme.desktop
           grep -Fqx 'ModuleName=two-step' dist/plymouth/Lyra-OS/Lyra-OS.plymouth
           test -f dist/plymouth/Lyra-OS/watermark.png
           test -x dist/dracut/51lyra-plymouth/module-setup.sh

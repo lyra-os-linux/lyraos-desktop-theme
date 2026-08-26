@@ -61,6 +61,10 @@ jobs:
           test -f /usr/share/grub/themes/Lyra-OS/theme.txt
           test -d /usr/share/icons/Lyra-OS-Icons
           test -f /usr/share/glib-2.0/schemas/99-lyra-os.gschema.override
+          test -x /usr/libexec/lyra-os-apply-full-theme
+          test -f /etc/xdg/autostart/lyra-os-full-theme.desktop
+          grep -Fqx "gtk-theme='Lyra-OS'" \
+            /usr/share/glib-2.0/schemas/99-lyra-os.gschema.override
           test -f /usr/share/backgrounds/lyra/lyra-voyage.png
           test -f /usr/share/backgrounds/lyra/lyra-voyage.jxl
           test "$(find /usr/share/backgrounds/lyra -maxdepth 1 -name '*.png' | wc -l)" -eq 11

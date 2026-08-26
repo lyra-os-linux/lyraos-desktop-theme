@@ -26,7 +26,7 @@ Requires(preun): plymouth-scripts
 Requires(post): dconf
 Requires(preun): dconf
 Recommends:     fastfetch
-Recommends:     gnome-shell-extension-user-theme
+Requires:       gnome-shell-extension-user-theme
 Suggests:       neofetch
 
 %description
@@ -58,6 +58,12 @@ install -m 0644 dist/gnome-background-properties/lyra-os.xml \
 install -d %{buildroot}%{_datadir}/glib-2.0/schemas
 install -m 0644 src/defaults/99-lyra-os.gschema.override \
   %{buildroot}%{_datadir}/glib-2.0/schemas/
+
+install -d %{buildroot}%{_libexecdir} %{buildroot}%{_sysconfdir}/xdg/autostart
+install -m 0755 src/defaults/lyra-os-apply-full-theme \
+  %{buildroot}%{_libexecdir}/lyra-os-apply-full-theme
+install -m 0644 src/defaults/lyra-os-full-theme.desktop \
+  %{buildroot}%{_sysconfdir}/xdg/autostart/
 
 install -d %{buildroot}%{_datadir}/grub/themes
 cp -a dist/grub/Lyra-OS %{buildroot}%{_datadir}/grub/themes/
@@ -144,6 +150,19 @@ logo='/usr/share/lyra-os-theme/gdm/logo.svg'
 fallback-logo=''
 GDM_DCONF
 %{_bindir}/dconf update || :
+
+# Apply immediately to every reachable graphical user session. Users who are
+# currently logged out are covered by the XDG autostart entry on next login.
+%{_bindir}/loginctl list-sessions --no-legend 2>/dev/null | while read -r session_id session_uid session_user _; do
+  [ "$(%{_bindir}/loginctl show-session "$session_id" -p Class --value 2>/dev/null)" = user ] || continue
+  session_bus="/run/user/$session_uid/bus"
+  [ -S "$session_bus" ] || continue
+  %{_sbindir}/runuser -u "$session_user" -- env \
+    HOME="$(getent passwd "$session_user" | cut -d: -f6)" \
+    XDG_RUNTIME_DIR="/run/user/$session_uid" \
+    DBUS_SESSION_BUS_ADDRESS="unix:path=$session_bus" \
+    %{_libexecdir}/lyra-os-apply-full-theme || :
+done || :
 
 # Migrate the pre-rename icon-theme value ('Lyra-Enterprise-Icons') that
 # earlier package versions left behind in already-logged-in users' own
@@ -240,6 +259,8 @@ fi
 %dir %{_datadir}/gnome-background-properties
 %{_datadir}/gnome-background-properties/lyra-os.xml
 %{_datadir}/glib-2.0/schemas/99-lyra-os.gschema.override
+%{_libexecdir}/lyra-os-apply-full-theme
+%{_sysconfdir}/xdg/autostart/lyra-os-full-theme.desktop
 %dir %{_datadir}/grub
 %dir %{_datadir}/grub/themes
 %{_datadir}/grub/themes/Lyra-OS/

@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Apply the complete Lyra theme to the current user.  The RPM runs this for
+# active sessions after an upgrade and XDG autostart covers users who were
+# logged out at that moment.
+theme=Lyra-OS
+scheme=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || true)
+if [[ $scheme == "'prefer-light'" ]]; then
+  theme=Lyra-OS-Light
+fi
+
+theme_root=/usr/share/themes/$theme
+[[ -r $theme_root/gtk-4.0/gtk.css ]] || exit 0
+
+gsettings set org.gnome.desktop.interface gtk-theme "$theme" 2>/dev/null || true
+
+gtk4_dir=${XDG_CONFIG_HOME:-$HOME/.config}/gtk-4.0
+managed_marker=$gtk4_dir/.lyra-os-managed
+install -d "$gtk4_dir"
+
+# Preserve CSS that was not created by Lyra.  Once managed, refresh the local
+# copy on every package update/login so palette fixes reach GTK 4/libadwaita
+# applications without an import or symlink outside a sandbox.
+if [[ -e $gtk4_dir/gtk.css && ! -e $managed_marker ]]; then
+  cp -a "$gtk4_dir/gtk.css" "$gtk4_dir/gtk.css.before-lyra-os"
+fi
+install -m 0644 "$theme_root/gtk-4.0/gtk.css" "$gtk4_dir/gtk.css"
+printf '%s\n' "$theme" > "$managed_marker"
+
+uuid=user-theme@gnome-shell-extensions.gcampax.github.com
+if [[ $(gsettings writable org.gnome.shell enabled-extensions 2>/dev/null || true) == true ]]; then
+  current=$(gsettings get org.gnome.shell enabled-extensions)
+  if [[ $current != *"'$uuid'"* ]]; then
+    if [[ $current == '[]' ]]; then
+      gsettings set org.gnome.shell enabled-extensions "['$uuid']"
+    else
+      gsettings set org.gnome.shell enabled-extensions "${current%]}, '$uuid']"
+    fi
+  fi
+fi
+if [[ $(gsettings writable org.gnome.shell.extensions.user-theme name 2>/dev/null || true) == true ]]; then
+  gsettings set org.gnome.shell.extensions.user-theme name "$theme"
+fi
