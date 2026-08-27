@@ -1,6 +1,6 @@
 # Empacotamento para o GitHub Actions (build direto da tag, sem depender do
 # _service do OBS) e para o gatilho do openSUSE Build Service
-# (home:rodrigosbrito:lyra/2702-theme, ver .github/workflows/release-opensuse.yml).
+# (home:rodrigosbrito:lyra/lyra-theme, ver .github/workflows/release-opensuse.yml).
 # Cópia de packaging/lyra-os-theme.spec adaptada apenas no Source0 e
 # na preparação das fontes para o tarball "achatado" (sem diretório
 # versionado dentro do arquivo) que o workflow monta. O restante do spec é
