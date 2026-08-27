@@ -5,5 +5,5 @@ accent-color='blue'
 color-scheme='prefer-dark'
 
 [org.gnome.desktop.background]
-picture-uri='file:///usr/share/backgrounds/lyra/lyra-voyage.png'
-picture-uri-dark='file:///usr/share/backgrounds/lyra/lyra-voyage.png'
+picture-uri='file:///usr/share/backgrounds/lyra/2702-voyage.png'
+picture-uri-dark='file:///usr/share/backgrounds/lyra/2702-voyage.png'

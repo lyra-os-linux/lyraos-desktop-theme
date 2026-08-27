@@ -147,7 +147,7 @@ sudo zypper --gpg-auto-import-keys refresh "$repo_alias"
 say info_installing_pkgs
 sudo zypper --non-interactive install \
   curl fastfetch glib2-tools gnome-shell-extension-user-theme \
-  lyra-os-theme lyra-os-icons
+  lyra-os-theme lyra-os-icons lyra-os-wallpapers
 command -v curl >/dev/null 2>&1 || die err_curl_missing
 
 fastfetch_share=/usr/share/lyra-os-theme/fastfetch
@@ -179,9 +179,9 @@ if command -v gsettings >/dev/null 2>&1; then
   fi
 
   gsettings set org.gnome.desktop.background picture-uri \
-    'file:///usr/share/backgrounds/lyra/lyra-voyage.png'
+    'file:///usr/share/backgrounds/lyra/2702-voyage.png'
   gsettings set org.gnome.desktop.background picture-uri-dark \
-    'file:///usr/share/backgrounds/lyra/lyra-voyage.png'
+    'file:///usr/share/backgrounds/lyra/2702-voyage.png'
 else
   say warn_gsettings_missing
 fi
@@ -244,8 +244,8 @@ icon-theme='Lyra-OS-Icons'
 color-scheme='$scheme'
 
 [org/gnome/desktop/background]
-picture-uri='file:///usr/share/backgrounds/lyra/lyra-voyage.png'
-picture-uri-dark='file:///usr/share/backgrounds/lyra/lyra-voyage.png'
+picture-uri='file:///usr/share/backgrounds/lyra/2702-voyage.png'
+picture-uri-dark='file:///usr/share/backgrounds/lyra/2702-voyage.png'
 picture-options='zoom'
 
 [org/gnome/shell]

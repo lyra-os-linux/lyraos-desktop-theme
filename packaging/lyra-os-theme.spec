@@ -15,6 +15,7 @@ BuildRequires:  nodejs
 BuildRequires:  rsvg-convert
 BuildRequires:  sassc
 Requires:       lyra-os-icons
+Requires:       lyra-os-wallpapers
 Requires:       cantarell-fonts
 Requires:       dracut
 Requires:       plymouth-plugin-two-step
@@ -32,7 +33,7 @@ Suggests:       neofetch
 %description
 Corporate, flat GNOME 48+ theme with dark and light variants for GNOME Shell,
 GTK 4/libadwaita and GTK 3, also themed on the GDM login screen. Includes
-matching PNG and JPEG XL wallpapers, the Lyra OS boot menu theme for
+the Lyra OS boot menu theme for
 GRUB 2, a matching Plymouth boot splash theme, plus Fastfetch and Neofetch
 configs with a Lyra ascii logo.
 
@@ -41,19 +42,10 @@ configs with a Lyra ascii logo.
 
 %build
 ./scripts/build.sh
-./scripts/build-wallpaper-variants.sh
 
 %install
 install -d %{buildroot}%{_datadir}/themes
 cp -a dist/Lyra-OS dist/Lyra-OS-Light %{buildroot}%{_datadir}/themes/
-
-install -d %{buildroot}%{_datadir}/backgrounds/lyra
-install -m 0644 dist/backgrounds/*.png dist/backgrounds/*.jxl \
-  %{buildroot}%{_datadir}/backgrounds/lyra/
-
-install -d %{buildroot}%{_datadir}/gnome-background-properties
-install -m 0644 dist/gnome-background-properties/lyra-os.xml \
-  %{buildroot}%{_datadir}/gnome-background-properties/
 
 install -d %{buildroot}%{_datadir}/glib-2.0/schemas
 install -m 0644 src/defaults/99-lyra-os.gschema.override \
@@ -135,8 +127,8 @@ icon-theme='Lyra-OS-Icons'
 color-scheme='prefer-dark'
 
 [org/gnome/desktop/background]
-picture-uri='file:///usr/share/backgrounds/lyra/lyra-voyage.png'
-picture-uri-dark='file:///usr/share/backgrounds/lyra/lyra-voyage.png'
+picture-uri='file:///usr/share/backgrounds/lyra/2702-voyage.png'
+picture-uri-dark='file:///usr/share/backgrounds/lyra/2702-voyage.png'
 picture-options='zoom'
 
 [org/gnome/shell]
@@ -252,12 +244,6 @@ fi
 # bootloader/splash the system already has), so nothing else is
 # guaranteed to own the parent dirs — rpmbuild's unowned-directory check
 # fails without these.
-%dir %{_datadir}/backgrounds
-%dir %{_datadir}/backgrounds/lyra
-%{_datadir}/backgrounds/lyra/*.png
-%{_datadir}/backgrounds/lyra/*.jxl
-%dir %{_datadir}/gnome-background-properties
-%{_datadir}/gnome-background-properties/lyra-os.xml
 %{_datadir}/glib-2.0/schemas/99-lyra-os.gschema.override
 %{_libexecdir}/lyra-os-apply-full-theme
 %{_sysconfdir}/xdg/autostart/lyra-os-full-theme.desktop

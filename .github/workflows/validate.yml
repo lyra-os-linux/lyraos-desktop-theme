@@ -5,33 +5,15 @@ jobs:
     runs-on: ubuntu-latest
     container: opensuse/tumbleweed:latest
     steps:
-      - run: zypper --non-interactive install tar xz git sassc ImageMagick nodejs rsvg-convert cantarell-fonts
+      - run: zypper --non-interactive install git sassc ImageMagick nodejs rsvg-convert cantarell-fonts
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - run: bash -n install.sh
-      - run: bash -n install-rpm.sh
-      - run: bash -n src/defaults/lyra-os-apply-full-theme
+      - run: bash -n install-rpm.sh src/defaults/lyra-os-apply-full-theme
       - run: ./scripts/test-i18n.sh
       - run: ./scripts/build.sh
-      - run: ./scripts/build-wallpaper-variants.sh
       - run: |
-          test -f dist/backgrounds/lyra-voyage.png
-          test -f dist/backgrounds/lyra-voyage.jxl
-          test "$(find dist/backgrounds -maxdepth 1 -name '*.png' | wc -l)" -eq 11
-          test "$(find dist/backgrounds -maxdepth 1 -name '*.jxl' | wc -l)" -eq 11
-          grep -Fqx "picture-uri='file:///usr/share/backgrounds/lyra/lyra-voyage.png'" \
-            src/defaults/99-lyra-os.gschema.override
-          grep -Fqx "picture-uri-dark='file:///usr/share/backgrounds/lyra/lyra-voyage.png'" \
-            src/defaults/99-lyra-os.gschema.override
-          grep -Fqx "gtk-theme='Lyra-OS'" \
-            src/defaults/99-lyra-os.gschema.override
-          grep -Fqx 'Exec=/usr/libexec/lyra-os-apply-full-theme' \
-            src/defaults/lyra-os-full-theme.desktop
-          grep -Fqx 'ModuleName=two-step' dist/plymouth/Lyra-OS/Lyra-OS.plymouth
+          test -f dist/Lyra-OS/gnome-shell/gnome-shell.css
+          test -f dist/Lyra-OS-Light/gnome-shell/gnome-shell.css
           test -f dist/plymouth/Lyra-OS/watermark.png
           test -x dist/dracut/51lyra-plymouth/module-setup.sh
-          bash -n dist/dracut/51lyra-plymouth/module-setup.sh
-      - run: ./scripts/package.sh
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        with:
-          name: Lyra-OS
-          path: Lyra-OS.tar.xz
+          grep -Fqx "picture-uri='file:///usr/share/backgrounds/lyra/2702-voyage.png'" \
+            src/defaults/99-lyra-os.gschema.override

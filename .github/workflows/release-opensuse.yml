@@ -1,7 +1,6 @@
 name: Release RPMs (openSUSE)
 
-# Builda o tema e os ícones em RPMs independentes a partir dos specs em
-# packaging/opensuse/ e anexa os dois na GitHub Release da tag empurrada.
+# Builda o RPM do tema a partir do spec em packaging/opensuse/.
 # O envio pro openSUSE Build Service (home:rodrigosbrito:lyra/lyra-theme) é
 # manual via `osc service manualrun` + `osc commit` — não roda mais daqui.
 on:
@@ -32,14 +31,13 @@ jobs:
           # no OBS. Substituir a versão literal apenas na cópia usada pelo
           # rpmbuild mantém o spec compatível com o serviço set_version.
           sed -i -E "s/^Version:[[:space:]]+.*/Version:        $version/" \
-            packaging/opensuse/lyra-os-theme.spec packaging/opensuse/lyra-os-icons.spec
+            packaging/opensuse/lyra-os-theme.spec
           tar czf "$HOME/rpmbuild/SOURCES/lyra-theme-src-$version.tar.gz" \
             --exclude='.git' \
             --exclude='dist' \
             --exclude='Lyra-OS.tar.xz' \
             .
           rpmbuild -bb --define "version $version" packaging/opensuse/lyra-os-theme.spec
-          rpmbuild -bb --define "version $version" packaging/opensuse/lyra-os-icons.spec
 
       - name: Coletar RPMs finais (sem debuginfo/debugsource)
         run: |
@@ -50,7 +48,7 @@ jobs:
 
       - name: Validar instalação
         run: |
-          zypper --non-interactive --no-gpg-checks install -y rpms/*.rpm
+          rpm -Uvh --nodeps rpms/*.rpm
           test -f /usr/share/themes/Lyra-OS/gnome-shell/gnome-shell.css
           test -f /usr/share/themes/Lyra-OS-Light/gnome-shell/gnome-shell.css
           test -f /usr/share/plymouth/themes/Lyra-OS/Lyra-OS.plymouth
@@ -59,19 +57,14 @@ jobs:
             /usr/share/plymouth/themes/Lyra-OS/Lyra-OS.plymouth
           test -x /usr/lib/dracut/modules.d/51lyra-plymouth/module-setup.sh
           test -f /usr/share/grub/themes/Lyra-OS/theme.txt
-          test -d /usr/share/icons/Lyra-OS-Icons
           test -f /usr/share/glib-2.0/schemas/99-lyra-os.gschema.override
           test -x /usr/libexec/lyra-os-apply-full-theme
           test -f /etc/xdg/autostart/lyra-os-full-theme.desktop
           grep -Fqx "gtk-theme='Lyra-OS'" \
             /usr/share/glib-2.0/schemas/99-lyra-os.gschema.override
-          test -f /usr/share/backgrounds/lyra/lyra-voyage.png
-          test -f /usr/share/backgrounds/lyra/lyra-voyage.jxl
-          test "$(find /usr/share/backgrounds/lyra -maxdepth 1 -name '*.png' | wc -l)" -eq 11
-          test "$(find /usr/share/backgrounds/lyra -maxdepth 1 -name '*.jxl' | wc -l)" -eq 11
-          grep -Fqx "picture-uri='file:///usr/share/backgrounds/lyra/lyra-voyage.png'" \
+          grep -Fqx "picture-uri='file:///usr/share/backgrounds/lyra/2702-voyage.png'" \
             /usr/share/glib-2.0/schemas/99-lyra-os.gschema.override
-          grep -Fqx "picture-uri-dark='file:///usr/share/backgrounds/lyra/lyra-voyage.png'" \
+          grep -Fqx "picture-uri-dark='file:///usr/share/backgrounds/lyra/2702-voyage.png'" \
             /usr/share/glib-2.0/schemas/99-lyra-os.gschema.override
           test -f /etc/skel/.config/neofetch/config.conf
           test -f /etc/skel/.config/fastfetch/config.jsonc

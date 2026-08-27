@@ -36,7 +36,7 @@ declare -A MSG_EN_US=(
   [err_sudo_required]="sudo is required"
   [info_adding_repo]="Adding repo %s"
   [info_refreshing_key]="Refreshing and importing the repo GPG key"
-  [info_installing_pkgs]="Installing lyra-os-theme and lyra-os-icons"
+  [info_installing_pkgs]="Installing Lyra OS theme, icons and wallpapers"
   [info_done]="Done"
 )
 
@@ -49,7 +49,7 @@ declare -A MSG_PT_BR=(
   [err_sudo_required]="sudo é necessário"
   [info_adding_repo]="Adicionando o repositório %s"
   [info_refreshing_key]="Atualizando e importando a chave GPG do repositório"
-  [info_installing_pkgs]="Instalando lyra-os-theme e lyra-os-icons"
+  [info_installing_pkgs]="Instalando tema, ícones e wallpapers do Lyra OS"
   [info_done]="Concluído"
 )
 
@@ -62,7 +62,7 @@ declare -A MSG_ES=(
   [err_sudo_required]="se requiere sudo"
   [info_adding_repo]="Agregando el repositorio %s"
   [info_refreshing_key]="Actualizando e importando la clave GPG del repositorio"
-  [info_installing_pkgs]="Instalando lyra-os-theme y lyra-os-icons"
+  [info_installing_pkgs]="Instalando tema, íconos y fondos de Lyra OS"
   [info_done]="Listo"
 )
 
@@ -120,7 +120,8 @@ sudo zypper --gpg-auto-import-keys refresh "$repo_alias"
 
 if ((install)); then
   say info_installing_pkgs
-  sudo zypper --non-interactive install lyra-os-theme lyra-os-icons
+  sudo zypper --non-interactive install \
+    lyra-os-theme lyra-os-icons lyra-os-wallpapers
 fi
 
 say info_done

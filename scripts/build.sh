@@ -48,7 +48,6 @@ for variant in Lyra-OS Lyra-OS-Light; do
   mkdir -p "$dist/$variant/gnome-shell" "$dist/$variant/gtk-4.0" \
     "$dist/$variant/gtk-3.0"
 done
-mkdir -p "$dist/backgrounds" "$dist/gnome-background-properties"
 mkdir -p "$dist/grub/Lyra-OS"
 mkdir -p "$dist/neofetch" "$dist/fastfetch" "$dist/gdm"
 
@@ -64,8 +63,6 @@ cp "$root/src/neofetch/config.conf" "$dist/neofetch/"
 cp "$root/src/fastfetch/config.jsonc" "$root/src/fastfetch/logo.txt" \
   "$dist/fastfetch/"
 cp "$root/src/gdm/logo.svg" "$dist/gdm/"
-
-cp "$root/src/wallpaper/lyra-os.xml" "$dist/gnome-background-properties/"
 
 cp "$root/src/grub/theme.txt" "$dist/grub/Lyra-OS/"
 svg_to_png "$root/src/grub/background.svg" \
