@@ -66,3 +66,128 @@ scale trough, progressbar trough { background-color: $ent-border; border-radius:
 scale highlight, progressbar progress { background-color: $ent-accent; border-radius: 8px; }
 tooltip { background-color: $ent-surface-raised; color: $ent-text; border: 1px solid $ent-border; border-radius: 8px; }
 
+/* XFCE shell: a quiet, modern panel that keeps native plugins intact. */
+.xfce4-panel.background,
+.xfce4-panel#XfcePanelWindow {
+  background-color: rgba(10, 16, 32, .90);
+  color: #eef2ff;
+  box-shadow: 0 -8px 28px rgba(2, 6, 23, .30);
+}
+.xfce4-panel button,
+.xfce4-panel #xfce-panel-button,
+.xfce4-panel #xfce-panel-toggle-button {
+  min-height: 34px;
+  min-width: 34px;
+  margin: 5px 3px;
+  padding: 2px 8px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: #eef2ff;
+}
+.xfce4-panel button:hover,
+.xfce4-panel #xfce-panel-button:hover,
+.xfce4-panel #xfce-panel-toggle-button:hover { background-color: rgba(96, 165, 250, .16); }
+.xfce4-panel button:checked,
+.xfce4-panel #xfce-panel-toggle-button:checked {
+  background-color: rgba(99, 102, 241, .30);
+  box-shadow: inset 0 -2px #67e8f9;
+}
+.xfce4-panel #whiskermenu-button {
+  margin-left: 7px;
+  margin-right: 6px;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: rgba(99, 102, 241, .18);
+}
+.xfce4-panel .tasklist button { padding-left: 12px; padding-right: 12px; }
+
+/* Whisker Menu: flat categories separated only by quiet horizontal rules. */
+#whiskermenu-window .category-button {
+  margin: 0;
+  border: 0;
+  border-top: 1px solid rgba(148, 163, 184, .14);
+  border-bottom: 1px solid rgba(15, 23, 42, .34);
+  border-radius: 0;
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+}
+#whiskermenu-window .category-button:first-child { border-top: 0; }
+#whiskermenu-window .category-button:hover {
+  background-color: rgba(96, 165, 250, .12);
+  background-image: none;
+  box-shadow: none;
+}
+#whiskermenu-window .category-button:checked {
+  background-color: rgba(99, 102, 241, .20);
+  background-image: none;
+  box-shadow: inset 3px 0 #67e8f9;
+}
+
+/* LightDM GTK Greeter: branded glass card over the Lyra Dawn artwork. */
+.lightdm-gtk-greeter { color: #f8fafc; }
+.lightdm-gtk-greeter #panel_window {
+  background-color: rgba(7, 12, 27, .80);
+  color: #e0e7ff;
+  border: 0;
+  box-shadow: 0 8px 30px rgba(2, 6, 23, .18);
+}
+.lightdm-gtk-greeter #panel_window menubar,
+.lightdm-gtk-greeter #panel_window menuitem { background: transparent; color: #e0e7ff; border: 0; }
+.lightdm-gtk-greeter #panel_window menuitem:hover { background-color: rgba(96, 165, 250, .16); }
+.lightdm-gtk-greeter #login_window,
+#login_window {
+  background-color: rgba(10, 16, 32, .62);
+  color: #f8fafc;
+  border: 0;
+  border-radius: 22px;
+  box-shadow: none;
+}
+.lightdm-gtk-greeter #power_window {
+  background-color: rgba(10, 16, 32, .90);
+  color: #f8fafc;
+  border: 0;
+  border-radius: 18px;
+  box-shadow: 0 20px 55px rgba(2, 6, 23, .50);
+}
+.lightdm-gtk-greeter #login_window .dialog-vbox,
+#login_window .dialog-vbox { padding: 28px; }
+.lightdm-gtk-greeter #content_frame,
+.lightdm-gtk-greeter #buttonbox_frame,
+#content_frame,
+#buttonbox_frame {
+  background-color: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.lightdm-gtk-greeter #user_image_border,
+#user_image_border {
+  border: 0;
+  border-radius: 999px;
+  background-color: rgba(49, 46, 129, .42);
+  box-shadow: 0 8px 28px rgba(59, 130, 246, .26);
+  padding: 8px;
+}
+.lightdm-gtk-greeter #login_window entry,
+#login_window entry {
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 11px;
+  background-color: rgba(15, 23, 42, .86);
+  color: #f8fafc;
+  caret-color: #67e8f9;
+}
+.lightdm-gtk-greeter #login_window entry:focus,
+#login_window entry:focus { box-shadow: 0 0 0 2px rgba(103, 232, 249, .22); }
+.lightdm-gtk-greeter #login_button {
+  min-height: 36px;
+  border: 0;
+  border-radius: 11px;
+  background-image: linear-gradient(100deg, #2563eb, #7c3aed);
+  color: white;
+  font-weight: 700;
+}
+.lightdm-gtk-greeter #login_button:hover { background-image: linear-gradient(100deg, #3b82f6, #8b5cf6); }
+.lightdm-gtk-greeter #message_label { color: #c4b5fd; }
