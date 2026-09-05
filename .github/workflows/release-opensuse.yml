@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Instalar dependências de build
         run: |
-          zypper --non-interactive install -y tar gzip git sassc ImageMagick nodejs rsvg-convert \
+          zypper --non-interactive install -y tar gzip git python3 python3-gobject rsvg-convert \
             cantarell-fonts rpm-build rpmdevtools
 
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -49,8 +49,6 @@ jobs:
       - name: Validar instalação
         run: |
           rpm -Uvh --nodeps rpms/*.rpm
-          test -f /usr/share/themes/Lyra-OS/gnome-shell/gnome-shell.css
-          test -f /usr/share/themes/Lyra-OS-Light/gnome-shell/gnome-shell.css
           test -f /usr/share/plymouth/themes/Lyra-OS/Lyra-OS.plymouth
           test -f /usr/share/plymouth/themes/Lyra-OS/watermark.png
           grep -Fqx 'ModuleName=two-step' \
@@ -60,8 +58,8 @@ jobs:
           test -f /usr/share/glib-2.0/schemas/99-lyra-os.gschema.override
           test -x /usr/libexec/lyra-os-apply-full-theme
           test -f /etc/xdg/autostart/lyra-os-full-theme.desktop
-          grep -Fqx "gtk-theme='Lyra-OS'" \
-            /usr/share/glib-2.0/schemas/99-lyra-os.gschema.override
+          test ! -d /usr/share/themes/Lyra-OS
+          test ! -d /usr/share/themes/Lyra-OS-Light
           grep -Fqx "picture-uri='file:///usr/share/backgrounds/lyra/2702-voyage.png'" \
             /usr/share/glib-2.0/schemas/99-lyra-os.gschema.override
           grep -Fqx "picture-uri-dark='file:///usr/share/backgrounds/lyra/2702-voyage.png'" \

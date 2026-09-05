@@ -1,8 +1,5 @@
 [org.gnome.desktop.interface]
-gtk-theme='Lyra-OS'
 icon-theme='Lyra-OS-Icons'
-accent-color='blue'
-color-scheme='prefer-dark'
 
 [org.gnome.desktop.background]
 picture-uri='file:///usr/share/backgrounds/lyra/2702-voyage.png'

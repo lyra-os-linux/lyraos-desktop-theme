@@ -1,44 +1,162 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/usr/bin/python3
+"""Use stock GNOME themes and synchronize Lyra icons with its accent color."""
+import os
+from pathlib import Path
+import re
+import sys
 
-# Apply the complete Lyra theme to the current user.  The RPM runs this for
-# active sessions after an upgrade and XDG autostart covers users who were
-# logged out at that moment.
-theme=Lyra-OS
-scheme=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null || true)
-if [[ $scheme == "'prefer-light'" ]]; then
-  theme=Lyra-OS-Light
-fi
+ACCENTS = ('blue', 'teal', 'green', 'yellow', 'orange', 'red', 'pink', 'purple', 'slate')
+THEMES = {'Lyra-OS', 'Lyra-OS-Light', 'Lyra-Enterprise', 'Lyra-Enterprise-Light'} | {
+    f'{base}-{accent}' for base in ('Lyra-OS', 'Lyra-OS-Light') for accent in ACCENTS
+}
+ICONS = {'Lyra-OS-Icons', 'Lyra-Enterprise-Icons'} | {
+    f'Lyra-OS-Icons-{accent}' for accent in ACCENTS
+}
 
-theme_root=/usr/share/themes/$theme
-[[ -r $theme_root/gtk-4.0/gtk.css ]] || exit 0
 
-gsettings set org.gnome.desktop.interface gtk-theme "$theme" 2>/dev/null || true
+def is_gnome(desktop, shell_running=False):
+    desktops = set(desktop.upper().split(':')) - {''}
+    # An explicitly different DE wins even if GNOME components are installed.
+    if desktops & {'KDE', 'PLASMA', 'XFCE', 'LXQT', 'MATE', 'CINNAMON'}:
+        return False
+    return 'GNOME' in desktops if desktops else shell_running
 
-gtk4_dir=${XDG_CONFIG_HOME:-$HOME/.config}/gtk-4.0
-managed_marker=$gtk4_dir/.lyra-os-managed
-install -d "$gtk4_dir"
 
-# Preserve CSS that was not created by Lyra.  Once managed, refresh the local
-# copy on every package update/login so palette fixes reach GTK 4/libadwaita
-# applications without an import or symlink outside a sandbox.
-if [[ -e $gtk4_dir/gtk.css && ! -e $managed_marker ]]; then
-  cp -a "$gtk4_dir/gtk.css" "$gtk4_dir/gtk.css.before-lyra-os"
-fi
-install -m 0644 "$theme_root/gtk-4.0/gtk.css" "$gtk4_dir/gtk.css"
-printf '%s\n' "$theme" > "$managed_marker"
+def selected_icon_theme(accent):
+    accent = accent if accent in ACCENTS else 'blue'
+    return f'Lyra-OS-Icons-{accent}'
 
-uuid=user-theme@gnome-shell-extensions.gcampax.github.com
-if [[ $(gsettings writable org.gnome.shell enabled-extensions 2>/dev/null || true) == true ]]; then
-  current=$(gsettings get org.gnome.shell enabled-extensions)
-  if [[ $current != *"'$uuid'"* ]]; then
-    if [[ $current == '[]' ]]; then
-      gsettings set org.gnome.shell enabled-extensions "['$uuid']"
-    else
-      gsettings set org.gnome.shell enabled-extensions "${current%]}, '$uuid']"
-    fi
-  fi
-fi
-if [[ $(gsettings writable org.gnome.shell.extensions.user-theme name 2>/dev/null || true) == true ]]; then
-  gsettings set org.gnome.shell.extensions.user-theme name "$theme"
-fi
+
+def data_file(relative, data_dirs):
+    return next((directory / relative for directory in data_dirs if (directory / relative).is_file()), None)
+
+
+def set_if_changed(settings, key, value):
+    if settings.get_string(key) != value and settings.is_writable(key):
+        settings.set_string(key, value)
+
+
+def remove_legacy_gtk(interface, config_dir):
+    if interface.get_string('gtk-theme') in THEMES:
+        set_if_changed(interface, 'gtk-theme', 'Adwaita')
+    gtk_dir = config_dir / 'gtk-4.0'
+    marker = gtk_dir / '.lyra-os-managed'
+    target = gtk_dir / 'gtk.css'
+    backup = gtk_dir / 'gtk.css.before-lyra-os'
+    if marker.exists():
+        if target.exists() and target.read_text().startswith('/* Lyra OS'):
+            if backup.exists():
+                os.replace(backup, target)
+            else:
+                target.unlink()
+        # An independently replaced stylesheet belongs to the user, not Lyra.
+        marker.unlink()
+    if target.exists():
+        content = target.read_text()
+        pattern = r"(?m)^[ \t]*@import url\([\"']?file:///usr/share/themes/Lyra-OS(?:-Light)?/gtk-4\.0/gtk\.css[\"']?\);[ \t]*\n?"
+        cleaned = re.sub(pattern, '', content)
+        if cleaned != content:
+            cleaned = cleaned.replace('/* Match the complete Lyra-OS GTK theme used by the reference workstation. */', '')
+            if cleaned.strip():
+                target.write_text(cleaned)
+            else:
+                target.unlink()
+
+
+def apply_preferences(interface, shell_theme, data_dirs, config_dir, desktop, shell_running=False):
+    if not is_gnome(desktop, shell_running):
+        return
+    schema = interface.props.settings_schema
+    # Older GNOME releases lack accent-color; blue is the supported fallback.
+    accent = interface.get_string('accent-color') if schema.has_key('accent-color') else 'blue'
+    icons = selected_icon_theme(accent)
+    remove_legacy_gtk(interface, config_dir)
+    if interface.get_string('icon-theme') in ICONS and data_file(f'icons/{icons}/index.theme', data_dirs):
+        set_if_changed(interface, 'icon-theme', icons)
+    if shell_theme and shell_theme.get_string('name') in THEMES:
+        set_if_changed(shell_theme, 'name', '')
+
+
+def main():
+    desktop = os.environ.get('XDG_CURRENT_DESKTOP', '')
+    if desktop and not is_gnome(desktop):
+        return 0
+    from gi.repository import Gio, GLib
+
+    bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+    shell_running = bus.call_sync(
+        'org.freedesktop.DBus', '/org/freedesktop/DBus', 'org.freedesktop.DBus',
+        'NameHasOwner', GLib.Variant('(s)', ('org.gnome.Shell',)), None,
+        Gio.DBusCallFlags.NONE, 1000, None,
+    ).unpack()[0]
+    if not is_gnome(desktop, shell_running):
+        return 0
+
+    source = Gio.SettingsSchemaSource.get_default()
+    schema = source.lookup('org.gnome.desktop.interface', True) if source else None
+    if not schema:
+        return 0
+    interface = Gio.Settings.new_full(schema, None, None)
+    data_dirs = [Path(GLib.get_user_data_dir())] + [Path(directory) for directory in GLib.get_system_data_dirs()]
+    shell_schema = source.lookup('org.gnome.shell.extensions.user-theme', True)
+    # Some distributions keep this schema inside the extension, not globally.
+    if not shell_schema:
+        for directory in data_dirs:
+            schemas = directory / 'gnome-shell/extensions/user-theme@gnome-shell-extensions.gcampax.github.com/schemas'
+            if (schemas / 'gschemas.compiled').is_file():
+                extension_source = Gio.SettingsSchemaSource.new_from_directory(str(schemas), source, False)
+                shell_schema = extension_source.lookup('org.gnome.shell.extensions.user-theme', False)
+                if shell_schema:
+                    break
+    shell_theme = Gio.Settings.new_full(shell_schema, None, None) if shell_schema else None
+    config_dir = Path(GLib.get_user_config_dir())
+
+    watch = '--watch' in sys.argv[1:]
+    app = Gio.Application(application_id='org.lyraos.Theme', flags=Gio.ApplicationFlags.DEFAULT_FLAGS)
+    started = False
+    pending = False
+
+    def apply():
+        nonlocal pending
+        pending = False
+        try:
+            apply_preferences(interface, shell_theme, data_dirs, config_dir, desktop, shell_running)
+            Gio.Settings.sync()
+        except OSError as error:
+            print(f'lyra-os-theme: {error}', file=sys.stderr)
+        return GLib.SOURCE_REMOVE
+
+    def schedule(*_):
+        nonlocal pending
+        if not pending:
+            pending = True
+            GLib.idle_add(apply)
+
+    def activate(_):
+        nonlocal started
+        apply()
+        if watch and not started:
+            started = True
+            app.hold()
+            for key in ('accent-color', 'icon-theme', 'gtk-theme'):
+                if schema.has_key(key):
+                    interface.connect(f'changed::{key}', schedule)
+            if shell_theme:
+                shell_theme.connect('changed::name', schedule)
+            # A lingering user bus must not keep the GNOME watcher alive in a
+            # later KDE or XFCE session.
+            Gio.bus_watch_name(
+                Gio.BusType.SESSION, 'org.gnome.Shell', Gio.BusNameWatcherFlags.NONE,
+                lambda *_: None, lambda *_: app.quit(),
+            )
+
+    app.connect('activate', activate)
+    return app.run([sys.argv[0]])
+
+
+if __name__ == '__main__':
+    try:
+        sys.exit(main())
+    except Exception as error:
+        print(f'lyra-os-theme: {error}', file=sys.stderr)
+        sys.exit(1)

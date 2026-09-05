@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Verifies the i18n catalogs embedded in install.sh and install-rpm.sh:
+# Verifies the i18n catalogs embedded in install-rpm.sh and add-obs-repo.sh:
 # that pt-BR/es have the same keys as en-US (no missing translations),
 # that LYRA_LANG picks the right catalog, and that an unsupported locale
 # falls back to en-US. Runs only the --help and unknown-option code paths,
@@ -87,26 +87,16 @@ check_unknown_option_error() {
 }
 
 printf 'Catalog key parity\n'
-check_parity "$root/install.sh"
 check_parity "$root/install-rpm.sh"
-check_parity "$root/scripts/install-local.sh"
 check_parity "$root/scripts/add-obs-repo.sh"
 
 printf 'Locale selection\n'
-check_locale_help "$root/install.sh" pt_BR "Instalador do Lyra OS"
-check_locale_help "$root/install.sh" es "Instalador de Lyra OS"
-check_locale_help "$root/install.sh" en_US "Lyra OS installer"
-check_unsupported_locale_falls_back_to_en "$root/install.sh" "Lyra OS installer"
 
 check_locale_help "$root/install-rpm.sh" pt_BR "Instalador RPM do Lyra OS"
 check_locale_help "$root/install-rpm.sh" es "Instalador RPM de Lyra OS"
 check_locale_help "$root/install-rpm.sh" en_US "Lyra OS RPM installer"
 check_unsupported_locale_falls_back_to_en "$root/install-rpm.sh" "Lyra OS RPM installer"
 
-check_locale_help "$root/scripts/install-local.sh" pt_BR "Instalador local do Lyra OS"
-check_locale_help "$root/scripts/install-local.sh" es "Instalador local de Lyra OS"
-check_locale_help "$root/scripts/install-local.sh" en_US "Lyra OS local installer"
-check_unsupported_locale_falls_back_to_en "$root/scripts/install-local.sh" "Lyra OS local installer"
 
 check_locale_help "$root/scripts/add-obs-repo.sh" pt_BR "Adiciona o repositório"
 check_locale_help "$root/scripts/add-obs-repo.sh" es "Agrega el repositorio"
@@ -114,15 +104,9 @@ check_locale_help "$root/scripts/add-obs-repo.sh" en_US "Add the openSUSE Build 
 check_unsupported_locale_falls_back_to_en "$root/scripts/add-obs-repo.sh" "Add the openSUSE Build Service repo"
 
 printf 'Error messages\n'
-check_unknown_option_error "$root/install.sh" pt_BR "Opção desconhecida"
-check_unknown_option_error "$root/install.sh" es "Opción desconocida"
-check_unknown_option_error "$root/install.sh" en_US "Unknown option"
 check_unknown_option_error "$root/install-rpm.sh" pt_BR "Opção desconhecida"
 check_unknown_option_error "$root/install-rpm.sh" es "Opción desconocida"
 check_unknown_option_error "$root/install-rpm.sh" en_US "Unknown option"
-check_unknown_option_error "$root/scripts/install-local.sh" pt_BR "Opção desconhecida"
-check_unknown_option_error "$root/scripts/install-local.sh" es "Opción desconocida"
-check_unknown_option_error "$root/scripts/install-local.sh" en_US "Unknown option"
 check_unknown_option_error "$root/scripts/add-obs-repo.sh" pt_BR "Opção desconhecida"
 check_unknown_option_error "$root/scripts/add-obs-repo.sh" es "Opción desconocida"
 check_unknown_option_error "$root/scripts/add-obs-repo.sh" en_US "Unknown option"

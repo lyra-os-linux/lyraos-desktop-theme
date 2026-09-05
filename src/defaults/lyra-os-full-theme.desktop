@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=Apply Lyra OS full theme
-Comment=Apply the Lyra OS window and Shell theme after package updates
-Exec=/usr/libexec/lyra-os-apply-full-theme
+Name=Sync Lyra OS GNOME appearance
+Comment=Use stock GNOME themes and follow its accent color for Lyra icons
+Exec=/usr/libexec/lyra-os-apply-full-theme --watch
 OnlyShowIn=GNOME;
 NoDisplay=true
 X-GNOME-Autostart-enabled=true

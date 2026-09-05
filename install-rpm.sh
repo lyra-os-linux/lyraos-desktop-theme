@@ -146,7 +146,7 @@ sudo zypper --gpg-auto-import-keys refresh "$repo_alias"
 
 say info_installing_pkgs
 sudo zypper --non-interactive install \
-  curl fastfetch glib2-tools gnome-shell-extension-user-theme \
+  curl fastfetch glib2-tools \
   lyra-os-theme lyra-os-icons lyra-os-wallpapers
 command -v curl >/dev/null 2>&1 || die err_curl_missing
 
@@ -167,10 +167,15 @@ if [[ ! -f "$fastfetch_share/config.jsonc" || \
     "$fastfetch_tmp/logo.txt" "$fastfetch_share/"
 fi
 
-if command -v gsettings >/dev/null 2>&1; then
+gnome_session=0
+desktop_session=${XDG_CURRENT_DESKTOP:-}
+case ":${desktop_session^^}:" in
+  *:KDE:*|*:PLASMA:*|*:XFCE:*) ;;
+  *:GNOME:*) gnome_session=1 ;;
+esac
+if ((gnome_session)) && command -v gsettings >/dev/null 2>&1; then
   say info_activating_icons_wallpapers
   gsettings set org.gnome.desktop.interface icon-theme 'Lyra-OS-Icons'
-  gsettings set org.gnome.desktop.interface accent-color 'blue' 2>/dev/null || true
 
   if [[ $variant == light ]]; then
     gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
@@ -182,7 +187,8 @@ if command -v gsettings >/dev/null 2>&1; then
     'file:///usr/share/backgrounds/lyra/2702-voyage.png'
   gsettings set org.gnome.desktop.background picture-uri-dark \
     'file:///usr/share/backgrounds/lyra/2702-voyage.png'
-else
+  /usr/libexec/lyra-os-apply-full-theme
+elif ((gnome_session)); then
   say warn_gsettings_missing
 fi
 
@@ -226,10 +232,8 @@ fi
 
 if command -v dconf >/dev/null 2>&1; then
   say info_confirming_gdm
-  shell_theme=Lyra-OS
   scheme=prefer-dark
   if [[ $variant == light ]]; then
-    shell_theme=Lyra-OS-Light
     scheme=prefer-light
   fi
   if [[ ! -f /etc/dconf/profile/gdm ]]; then
@@ -247,12 +251,6 @@ color-scheme='$scheme'
 picture-uri='file:///usr/share/backgrounds/lyra/2702-voyage.png'
 picture-uri-dark='file:///usr/share/backgrounds/lyra/2702-voyage.png'
 picture-options='zoom'
-
-[org/gnome/shell]
-enabled-extensions=['user-theme@gnome-shell-extensions.gcampax.github.com']
-
-[org/gnome/shell/extensions/user-theme]
-name='$shell_theme'
 
 [org/gnome/login-screen]
 logo='/usr/share/lyra-os-theme/gdm/logo.svg'

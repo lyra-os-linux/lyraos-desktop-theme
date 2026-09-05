@@ -4,8 +4,3 @@ Version 3, 29 June 2007
 This project is licensed under the GNU General Public License version 3 or,
 at your option, any later version. The complete license text is available at:
 https://www.gnu.org/licenses/gpl-3.0.txt
-
-The GTK 3 compatibility stylesheet under src/gtk3 is derived from the design
-and conventions of adw-gtk3 and remains licensed under LGPL-2.1-or-later; see
-src/gtk3/COPYING.LGPL and src/gtk3/ATTRIBUTION.md.
-

@@ -36,6 +36,10 @@ run_as_desktop_user() {
     "$@"
 }
 
+run_as_desktop_user gdbus call --session --dest org.freedesktop.DBus \
+  --object-path /org/freedesktop/DBus --method org.freedesktop.DBus.NameHasOwner \
+  org.gnome.Shell | grep -q true || die 'execute a partir de uma sessão GNOME'
+
 say 'Removendo pacotes antigos, se ainda estiverem instalados'
 old_packages=()
 for package in lyra-enterprise-theme lyra-enterprise-icons; do
@@ -61,15 +65,9 @@ icon-theme='Lyra-OS-Icons'
 color-scheme='prefer-dark'
 
 [org/gnome/desktop/background]
-picture-uri='file:///usr/share/backgrounds/lyra/lyra-voyage.png'
-picture-uri-dark='file:///usr/share/backgrounds/lyra/lyra-voyage.png'
+picture-uri='file:///usr/share/backgrounds/lyra/2702-voyage.png'
+picture-uri-dark='file:///usr/share/backgrounds/lyra/2702-voyage.png'
 picture-options='zoom'
-
-[org/gnome/shell]
-enabled-extensions=['user-theme@gnome-shell-extensions.gcampax.github.com']
-
-[org/gnome/shell/extensions/user-theme]
-name='Lyra-OS'
 
 [org/gnome/login-screen]
 logo='/usr/share/lyra-os-theme/gdm/logo.svg'
@@ -83,10 +81,8 @@ run_as_desktop_user gsettings set \
 run_as_desktop_user gsettings set \
   org.gnome.desktop.interface color-scheme 'prefer-dark'
 run_as_desktop_user gsettings set \
-  org.gnome.desktop.interface accent-color 'blue' || true
-run_as_desktop_user gsettings set \
   org.gnome.desktop.background picture-uri \
-  'file:///usr/share/backgrounds/lyra/lyra-voyage.png'
+  'file:///usr/share/backgrounds/lyra/2702-voyage.png'
 
 # gsettings via runuser+D-Bus pode "ter sucesso" mas escrever numa sessão
 # errada, deixando o valor antigo (ex.: um tema já removido) preso no
@@ -99,7 +95,9 @@ if [[ $applied_icon_theme != "'Lyra-OS-Icons'" ]]; then
 fi
 run_as_desktop_user gsettings set \
   org.gnome.desktop.background picture-uri-dark \
-  'file:///usr/share/backgrounds/lyra/lyra-voyage.png'
+  'file:///usr/share/backgrounds/lyra/2702-voyage.png'
+
+run_as_desktop_user /usr/libexec/lyra-os-apply-full-theme
 
 say 'Ativando configurações do Fastfetch e Neofetch'
 run_as_desktop_user mkdir -p \

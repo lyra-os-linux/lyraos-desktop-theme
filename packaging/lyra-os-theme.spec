@@ -1,19 +1,18 @@
 Name:           lyra-os-theme
-Version:        1.5.0
+Version:        1.9.3
 Release:        1%{?dist}
-Summary:        Corporate GNOME, GRUB and Plymouth theme for Lyra OS
-License:        GPL-3.0-or-later AND LGPL-2.1-or-later
+Summary:        Boot branding and GNOME icon integration for Lyra OS
+License:        GPL-3.0-or-later
 URL:            https://github.com/lyra-os-linux/lyraos-desktop-theme
 Source0:        %{name}-%{version}.tar.xz
 BuildArch:      noarch
 # cantarell-fonts também precisa estar disponível em build time: o texto
 # "LYRA OS" do watermark do Plymouth/GDM vem de um <text> no logo.svg,
 # rasterizado por rsvg-convert durante o build (não em runtime).
-BuildRequires:  ImageMagick
 BuildRequires:  cantarell-fonts
-BuildRequires:  nodejs
 BuildRequires:  rsvg-convert
-BuildRequires:  sassc
+BuildRequires:  python3
+Requires:       python3-gobject
 Requires:       lyra-os-icons
 Requires:       lyra-os-wallpapers
 Requires:       cantarell-fonts
@@ -27,12 +26,11 @@ Requires(preun): plymouth-scripts
 Requires(post): dconf
 Requires(preun): dconf
 Recommends:     fastfetch
-Requires:       gnome-shell-extension-user-theme
 Suggests:       neofetch
 
 %description
-Corporate, flat GNOME 48+ theme with dark and light variants for GNOME Shell,
-GTK 4/libadwaita and GTK 3, also themed on the GDM login screen. Includes
+GNOME applications and Shell use the standard GNOME theme. Lyra icons follow
+the system accent color. Includes the GDM login logo and
 the Lyra OS boot menu theme for
 GRUB 2, a matching Plymouth boot splash theme, plus Fastfetch and Neofetch
 configs with a Lyra ascii logo.
@@ -44,9 +42,6 @@ configs with a Lyra ascii logo.
 ./scripts/build.sh
 
 %install
-install -d %{buildroot}%{_datadir}/themes
-cp -a dist/Lyra-OS dist/Lyra-OS-Light %{buildroot}%{_datadir}/themes/
-
 install -d %{buildroot}%{_datadir}/glib-2.0/schemas
 install -m 0644 src/defaults/99-lyra-os.gschema.override \
   %{buildroot}%{_datadir}/glib-2.0/schemas/
@@ -131,12 +126,6 @@ picture-uri='file:///usr/share/backgrounds/lyra/2702-voyage.png'
 picture-uri-dark='file:///usr/share/backgrounds/lyra/2702-voyage.png'
 picture-options='zoom'
 
-[org/gnome/shell]
-enabled-extensions=['user-theme@gnome-shell-extensions.gcampax.github.com']
-
-[org/gnome/shell/extensions/user-theme]
-name='Lyra-OS'
-
 [org/gnome/login-screen]
 logo='/usr/share/lyra-os-theme/gdm/logo.svg'
 fallback-logo=''
@@ -147,52 +136,15 @@ GDM_DCONF
 # currently logged out are covered by the XDG autostart entry on next login.
 %{_bindir}/loginctl list-sessions --no-legend 2>/dev/null | while read -r session_id session_uid session_user _; do
   [ "$(%{_bindir}/loginctl show-session "$session_id" -p Class --value 2>/dev/null)" = user ] || continue
+  session_desktop=$(%{_bindir}/loginctl show-session "$session_id" -p Desktop --value 2>/dev/null)
   session_bus="/run/user/$session_uid/bus"
   [ -S "$session_bus" ] || continue
   %{_sbindir}/runuser -u "$session_user" -- env \
     HOME="$(getent passwd "$session_user" | cut -d: -f6)" \
+    XDG_CURRENT_DESKTOP="$session_desktop" \
     XDG_RUNTIME_DIR="/run/user/$session_uid" \
     DBUS_SESSION_BUS_ADDRESS="unix:path=$session_bus" \
     %{_libexecdir}/lyra-os-apply-full-theme || :
-done || :
-
-# Migrate the pre-rename icon-theme value ('Lyra-Enterprise-Icons') that
-# earlier package versions left behind in already-logged-in users' own
-# dconf db. The compiled gschema override above only supplies the default
-# for sessions with no explicit value, so it can't reach users who already
-# have the stale name recorded. Only sessions whose icon-theme is exactly
-# the stale value are touched, so a user's deliberate choice of a
-# different icon theme is never overwritten. A gsettings write via
-# runuser+D-Bus can silently no-op if the target bus isn't actually
-# reachable, so every write is read back and a failure is logged instead
-# of assumed fixed.
-stale_icon_theme='Lyra-Enterprise-Icons'
-new_icon_theme='Lyra-OS-Icons'
-%{_bindir}/loginctl list-sessions --no-legend 2>/dev/null | while read -r session_id session_uid session_user _; do
-  [ "$(%{_bindir}/loginctl show-session "$session_id" -p Class --value 2>/dev/null)" = user ] || continue
-  session_bus="/run/user/$session_uid/bus"
-  [ -S "$session_bus" ] || continue
-
-  current=$(%{_sbindir}/runuser -u "$session_user" -- env \
-    XDG_RUNTIME_DIR="/run/user/$session_uid" \
-    DBUS_SESSION_BUS_ADDRESS="unix:path=$session_bus" \
-    %{_bindir}/gsettings get org.gnome.desktop.interface icon-theme 2>/dev/null || :)
-  [ "$current" = "'$stale_icon_theme'" ] || continue
-
-  %{_sbindir}/runuser -u "$session_user" -- env \
-    XDG_RUNTIME_DIR="/run/user/$session_uid" \
-    DBUS_SESSION_BUS_ADDRESS="unix:path=$session_bus" \
-    %{_bindir}/gsettings set org.gnome.desktop.interface icon-theme "$new_icon_theme" || :
-
-  applied=$(%{_sbindir}/runuser -u "$session_user" -- env \
-    XDG_RUNTIME_DIR="/run/user/$session_uid" \
-    DBUS_SESSION_BUS_ADDRESS="unix:path=$session_bus" \
-    %{_bindir}/gsettings get org.gnome.desktop.interface icon-theme 2>/dev/null || :)
-  if [ "$applied" = "'$new_icon_theme'" ]; then
-    echo "lyra-os-theme: icon-theme obsoleto corrigido para $session_user (sessão $session_id)"
-  else
-    echo "lyra-os-theme: aviso: não foi possível corrigir o icon-theme de $session_user (sessão $session_id); rode manualmente: gsettings set org.gnome.desktop.interface icon-theme '$new_icon_theme'" >&2
-  fi
 done || :
 
 %preun
@@ -234,10 +186,8 @@ if [ "$1" -eq 0 ]; then
 fi
 
 %files
-%license LICENSE src/gtk3/COPYING.LGPL
-%doc README.md src/gtk3/ATTRIBUTION.md
-%{_datadir}/themes/Lyra-OS/
-%{_datadir}/themes/Lyra-OS-Light/
+%license LICENSE
+%doc README.md
 # Explicit parent-directory entries below are required because none of
 # these come from a Requires of this package (no grub2/plymouth runtime
 # dependency, since the theme is meant to be optional on top of whatever
