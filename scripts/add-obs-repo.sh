@@ -12,7 +12,7 @@ install=1
 
 # i18n: locale comes from LYRA_LANG, falling back to the usual
 # LC_ALL/LC_MESSAGES/LANG chain, and defaults to en_US when none of them
-# match a supported locale. Catalogs are embedded (matching install.sh) so
+# match a supported locale. Catalogs are embedded (matching install-rpm.sh) so
 # this script stays runnable on its own if copied out of the checkout.
 # Lookups go through associative arrays (never eval) so translated text is
 # always treated as data, not code.
