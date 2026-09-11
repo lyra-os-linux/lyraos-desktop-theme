@@ -81,13 +81,18 @@ static gboolean tick (gpointer unused)
     } else if (g_str_has_prefix(command,"window ")) {
         window_index=atoi(command+7);
     } else if (g_str_equal(command,"state")) {
+        guint file_windows=0;
+        for(guint i=0;i<g_list_model_get_n_items(windows);i++) {
+            g_autoptr(GtkWindow) candidate=g_list_model_get_item(windows,i);
+            if(gtk_widget_get_mapped(GTK_WIDGET(candidate)) && find_view(GTK_WIDGET(candidate)))file_windows++;
+        }
         graphene_rect_t bounds;
         ok=gtk_widget_compute_bounds(view,w,&bounds);
         GtkAdjustment *a=gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(find_scroll(view)));
         GtkSelectionModel *m=find_model(view);
         g_autoptr(GtkBitset) selection=m?gtk_selection_model_get_selection(m):NULL;
         g_autofree char *state=g_strdup_printf("{\"windows\":%u,\"window\":\"%p\",\"scale\":%d,\"x\":%.0f,\"y\":%.0f,\"width\":%.0f,\"height\":%.0f,\"mode\":\"%s\",\"items\":%u,\"selected\":%lu,\"scroll\":%.0f,\"upper\":%.0f,\"page\":%.0f}",
-            g_list_model_get_n_items(windows),(void*)w,gtk_widget_get_scale_factor(w),bounds.origin.x,bounds.origin.y,bounds.size.width,bounds.size.height,
+            file_windows,(void*)w,gtk_widget_get_scale_factor(w),bounds.origin.x,bounds.origin.y,bounds.size.width,bounds.size.height,
             gtk_widget_has_css_class(view,"nautilus-grid-view")?"grid":"list",
             m?g_list_model_get_n_items(G_LIST_MODEL(m)):0,selection?(unsigned long)gtk_bitset_get_size(selection):0,
             gtk_adjustment_get_value(a),gtk_adjustment_get_upper(a),gtk_adjustment_get_page_size(a));

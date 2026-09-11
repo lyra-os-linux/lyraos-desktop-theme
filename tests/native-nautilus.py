@@ -10,6 +10,7 @@ parser=argparse.ArgumentParser()
 parser.add_argument('--output',type=Path,required=True)
 parser.add_argument('--inside',action='store_true')
 parser.add_argument('--scale',type=int,default=1,choices=[1,2])
+parser.add_argument('--rpm',type=Path,help='Validate the actual RPM payload instead of recompiling the production module')
 args=parser.parse_args()
 out=args.output.resolve();out.mkdir(parents=True,exist_ok=True)
 def run(cmd,**kw):return subprocess.check_output(cmd,**kw)
@@ -27,9 +28,19 @@ if not args.inside:
         modules=tmp/'modules';modules.mkdir()
         flags=run(['pkg-config','--cflags','--libs','libadwaita-1','gmodule-2.0']).decode().split()
         for source,name in [(ROOT/'src/nautilus/lyra-watermark.c','liblyra-watermark.so'),(ROOT/'tests/nautilus-probe.c','libtest-probe.so')]:
+            if args.rpm and name=='liblyra-watermark.so':continue
             subprocess.run(['cc','-Wall','-Wextra','-Werror','-shared','-fPIC',str(source),'-o',str(modules/name),*flags],check=True)
         assets=tmp/'assets/nautilus';assets.mkdir(parents=True)
         shutil.copy2(ROOT/'src/nautilus/watermark-symbolic.svg',assets)
+        if args.rpm:
+            payload=tmp/'rpm';payload.mkdir()
+            run(['cpio','-idm','--quiet'],cwd=payload,input=run(['rpm2cpio',str(args.rpm.resolve())]))
+            libraries=list(payload.glob('usr/lib*/nautilus/extensions-4/liblyra-watermark.so'))
+            assert len(libraries)==1
+            shutil.copy2(libraries[0],modules/'liblyra-watermark.so')
+            asset=payload/'usr/share/lyra-os-theme/nautilus/watermark-symbolic.svg'
+            assert asset.read_bytes()==(assets/asset.name).read_bytes()
+            shutil.copy2(asset,assets)
         for folder in ['empty','full']:(tmp/folder).mkdir()
         for i in range(180):(tmp/'full'/f'File {i:03d}.txt').write_text('Fixture\n')
         gtk=tmp/'config/gtk-4.0';gtk.mkdir()

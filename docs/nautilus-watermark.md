@@ -65,6 +65,14 @@ python3 tests/native-nautilus.py --output /tmp/lyra-watermark-scale1
 python3 tests/native-nautilus.py --scale 2 --output /tmp/lyra-watermark-scale2
 ```
 
+Pass `--rpm /path/to/lyra-nautilus-branding.rpm` to extract and exercise the
+actual packaged module and artwork in that namespace, without installation.
+The checks compare complete screenshots with branding off/on and require all
+changed pixels to remain inside the logo rectangle. They also compare view
+geometry, scroll position, selection and 25 pointer hit targets. Coverage
+includes search, tab changes, a second window, resize, high contrast, extension
+disable switches and a higher-priority user stylesheet.
+
 Requires a C compiler, GTK4/libadwaita development packages, Nautilus, Mutter,
 bubblewrap, Python GI and GdkPixbuf. The fixture module is compiled solely into
 the test namespace and is never included in the RPM. PNGs, widget state and logs
