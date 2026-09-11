@@ -26,6 +26,7 @@ Requires(preun): plymouth-scripts
 Requires(post): dconf
 Requires(preun): dconf
 Recommends:     fastfetch
+Recommends:     (lyra-nautilus-branding if nautilus)
 Suggests:       neofetch
 
 %description

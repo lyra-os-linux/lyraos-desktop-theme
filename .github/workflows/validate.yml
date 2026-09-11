@@ -5,12 +5,20 @@ jobs:
     runs-on: ubuntu-latest
     container: opensuse/tumbleweed:latest
     steps:
-      - run: zypper --non-interactive install git python3 python3-gobject rsvg-convert cantarell-fonts
+      - run: zypper --non-interactive install git python3 python3-gobject rsvg-convert cantarell-fonts gcc gtk4-devel libadwaita-devel rpm-build
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - run: bash -n install-rpm.sh
       - run: ./scripts/test-i18n.sh
       - run: PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
       - run: ./scripts/build.sh
+      - name: Build Nautilus branding RPM
+        run: |
+          cc -Wall -Wextra -Werror -shared -fPIC tests/nautilus-probe.c \
+            -o /tmp/lyra-nautilus-probe.so $(pkg-config --cflags --libs libadwaita-1 gmodule-2.0)
+          mkdir -p /tmp/lyra-branding-rpm/{SOURCES,SPECS,BUILD,RPMS,SRPMS,BUILDROOT}
+          tar --exclude=.git --exclude=dist -czf /tmp/lyra-branding-rpm/SOURCES/lyra-theme-src-1.9.3.tar.gz \
+            --transform='s,^,lyra-theme-src-1.9.3/,' .
+          rpmbuild -bb --define '_topdir /tmp/lyra-branding-rpm' packaging/lyra-nautilus-branding.spec
       - run: test ! -d dist/Lyra-OS && test ! -d dist/Lyra-OS-Light
       - run: |
           test -f dist/plymouth/Lyra-OS/watermark.png
