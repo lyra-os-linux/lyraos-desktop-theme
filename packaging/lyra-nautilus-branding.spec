@@ -1,5 +1,5 @@
 Name:           lyra-nautilus-branding
-Version:        1.9.3
+Version:        1.9.4
 Release:        0
 Summary:        Lyra OS watermark for GNOME Files
 License:        GPL-3.0-or-later
@@ -12,8 +12,8 @@ Requires:       nautilus >= 48
 
 %description
 Adds a subtle Lyra OS watermark to the fixed file viewport in GNOME Files.
-Follows light and dark appearance and is removed immediately when the Sheliak
-desktop profile is disabled or high contrast is enabled. User stylesheets,
+Follows light and dark appearance and is removed immediately when all Lyra
+shell components are disabled or high contrast is enabled. User stylesheets,
 file layouts and mouse input are preserved.
 
 %prep

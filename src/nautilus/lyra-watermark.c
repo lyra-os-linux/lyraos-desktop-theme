@@ -24,10 +24,20 @@ contains (GSettings *settings, const char *key, const char *value)
 static void
 sync_watermark (void)
 {
-    const char *uuid = "sheliak@lyraos.com.br";
-    gboolean enabled = shell_settings &&
-        contains (shell_settings, "enabled-extensions", uuid) &&
-        !contains (shell_settings, "disabled-extensions", uuid) &&
+    /* Desktop Icons alone is also supported in GNOME Vanilla. It must not
+     * enable shell branding. Retain the monolithic UUID for older sessions. */
+    const char *uuids[] = {
+        "sheliak@lyraos.com.br", "dock@lyraos.com.br", "panel@lyraos.com.br",
+        "menus@lyraos.com.br", "search@lyraos.com.br", "animations@lyraos.com.br"
+    };
+    gboolean lyra_shell = FALSE;
+    for (guint i = 0; shell_settings && i < G_N_ELEMENTS (uuids); i++)
+        if (contains (shell_settings, "enabled-extensions", uuids[i]) &&
+            !contains (shell_settings, "disabled-extensions", uuids[i])) {
+            lyra_shell = TRUE;
+            break;
+        }
+    gboolean enabled = lyra_shell &&
         !g_settings_get_boolean (shell_settings, "disable-user-extensions") &&
         !(accessibility && g_settings_get_boolean (accessibility, "high-contrast"));
     g_debug ("Watermark enabled=%d attached=%d", enabled, attached);
