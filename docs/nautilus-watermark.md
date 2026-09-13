@@ -13,12 +13,18 @@ The background belongs to the fixed scrolled window, not its scrolling child.
 Empty-folder status pages have their own background so the logo is painted
 once even when the underlying file view is covered.
 
-The watermark is active in a GNOME session when Sheliak is enabled. Lyra,
-Ubuntu, Windows 10 and Windows 11 use that same condition. Disabling Sheliak
-(GNOME Vanilla), listing it in disabled extensions, disabling user extensions,
-or enabling high contrast removes the provider immediately in existing windows.
-The original colors/backgrounds are then supplied by Nautilus and the user
-theme. A user CSS provider has higher priority than this application provider.
+The watermark is active in a GNOME session when at least one Lyra shell
+component is enabled: Dock, Panel, Menus, Search or Animations. The legacy
+`sheliak@lyraos.com.br` UUID remains supported for older sessions. Lyra, Ubuntu,
+Lyra Classic, Lyra Central and Lyra Floating use the same condition.
+Each UUID listed in `disabled-extensions` is excluded independently. Disabling
+one component does not remove the watermark while another remains enabled.
+
+GNOME Vanilla, including Desktop Icons enabled on its own, leaves Nautilus
+unbranded. Disabling all user extensions or enabling high contrast removes the
+provider immediately in existing windows. The original colors/backgrounds are
+then supplied by Nautilus and the user theme. A user CSS provider has higher
+priority than this application provider.
 
 No Nautilus process is restarted by the package. Initial installation or a
 module update takes effect at the next Nautilus process start; subsequent

@@ -78,7 +78,8 @@ def capture(name):
     assert request('capture '+str(out/(name+'.png')))=='ok'
 def settings(key,value,schema='org.gnome.shell'):
     subprocess.run(['gsettings','set',schema,key,value],env=env,check=True)
-def enabled(value):settings('enabled-extensions',"['sheliak@lyraos.com.br']" if value else '[]')
+active_ids = ['panel@lyraos.com.br']
+def enabled(value):settings('enabled-extensions',repr(active_ids) if value else '[]')
 def pixels(name):
     p=GdkPixbuf.Pixbuf.new_from_file(str(out/(name+'.png')))
     return p,p.get_pixels()
@@ -168,11 +169,25 @@ with (out/'mutter.log').open('w') as log:
             assert json.loads(request('state'))['scale']==args.scale
             assert request('custom-on')=='ok';compare('user-css',False)
             assert request('custom-off')=='ok';compare('user-css-restored')
-            for key,value,reset in [('disabled-extensions',"['sheliak@lyraos.com.br']",'[]'),('disable-user-extensions','true','false')]:
+            for key,value,reset in [('disabled-extensions',"['panel@lyraos.com.br']",'[]'),('disable-user-extensions','true','false')]:
                 settings(key,value);compare(key,False)
                 settings(key,reset);compare(key+'-restored')
             settings('high-contrast','true','org.gnome.desktop.a11y.interface');compare('high-contrast',False)
             settings('high-contrast','false','org.gnome.desktop.a11y.interface');compare('contrast-restored')
+            for role in ['sheliak', 'dock', 'panel', 'menus', 'search', 'animations']:
+                active_ids = [role+'@lyraos.com.br']
+                compare('component-'+role)
+                settings('disabled-extensions',repr(active_ids));compare('component-'+role+'-disabled',False)
+                settings('disabled-extensions','[]')
+            active_ids = ['desktop-icons@lyraos.com.br']
+            compare('vanilla-with-desktop-icons',False)
+            active_ids = ['panel@lyraos.com.br','menus@lyraos.com.br','desktop-icons@lyraos.com.br']
+            settings('disabled-extensions',"['panel@lyraos.com.br']")
+            compare('other-component-keeps-branding')
+            settings('disabled-extensions',"['panel@lyraos.com.br','menus@lyraos.com.br']")
+            compare('all-shell-components-disabled',False)
+            settings('disabled-extensions','[]')
+            active_ids = ['panel@lyraos.com.br']
             assert request('action win.new-tab')=='ok';time.sleep(.5)
             assert request('location '+str(tmp/'full'))=='ok';time.sleep(1)
             compare('second-tab')

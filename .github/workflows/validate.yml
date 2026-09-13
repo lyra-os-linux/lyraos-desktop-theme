@@ -16,8 +16,8 @@ jobs:
           cc -Wall -Wextra -Werror -shared -fPIC tests/nautilus-probe.c \
             -o /tmp/lyra-nautilus-probe.so $(pkg-config --cflags --libs libadwaita-1 gmodule-2.0)
           mkdir -p /tmp/lyra-branding-rpm/{SOURCES,SPECS,BUILD,RPMS,SRPMS,BUILDROOT}
-          tar --exclude=.git --exclude=dist -czf /tmp/lyra-branding-rpm/SOURCES/lyra-theme-src-1.9.3.tar.gz \
-            --transform='s,^,lyra-theme-src-1.9.3/,' .
+          tar --exclude=.git --exclude=dist -czf /tmp/lyra-branding-rpm/SOURCES/lyra-theme-src-1.9.4.tar.gz \
+            --transform='s,^,lyra-theme-src-1.9.4/,' .
           rpmbuild -bb --define '_topdir /tmp/lyra-branding-rpm' packaging/lyra-nautilus-branding.spec
       - name: Build LibreOffice branding RPM
         run: |
