@@ -1,0 +1,3 @@
+# Lyra GRUB preference, kept outside the openSUSE branding activation script.
+# Set GRUB_THEME here to choose another theme or an empty value for text mode.
+GRUB_THEME="/usr/share/grub/themes/Lyra-OS/theme.txt"

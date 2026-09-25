@@ -1,5 +1,5 @@
 Name:           lyra-os-theme
-Version:        1.9.3
+Version:        1.9.4
 Release:        1%{?dist}
 Summary:        Boot branding and GNOME icon integration for Lyra OS
 License:        GPL-3.0-or-later
@@ -53,6 +53,9 @@ install -m 0755 src/defaults/lyra-os-apply-full-theme \
 install -m 0644 src/defaults/lyra-os-full-theme.desktop \
   %{buildroot}%{_sysconfdir}/xdg/autostart/
 
+install -D -m 0644 src/defaults/grub.lyra-theme \
+  %{buildroot}%{_sysconfdir}/default/grub.lyra-theme
+
 install -d %{buildroot}%{_datadir}/grub/themes
 cp -a dist/grub/Lyra-OS %{buildroot}%{_datadir}/grub/themes/
 
@@ -96,7 +99,11 @@ if [ -f "$grub_default" ]; then
     grep '^[[:space:]]*GRUB_THEME=' "$grub_default" > "$grub_backup" || :
   fi
   sed -i '/^[[:space:]]*GRUB_THEME=/d' "$grub_default"
-  printf '%s\n' "$lyra_theme" >> "$grub_default"
+  # Keep one assignment before the include: activate-theme rewrites it in
+  # place, instead of appending a new overriding assignment after our include.
+  sed -i '\@^\[ ! -r /etc/default/grub\.lyra-theme \] || \. /etc/default/grub\.lyra-theme$@d' "$grub_default"
+  printf '%s\n' "$lyra_theme" \
+    '[ ! -r /etc/default/grub.lyra-theme ] || . /etc/default/grub.lyra-theme' >> "$grub_default"
   %{_sbindir}/grub2-mkconfig -o /boot/grub2/grub.cfg || :
 fi
 
@@ -155,8 +162,17 @@ if [ "$1" -eq 0 ]; then
   plymouth_backup=%{_localstatedir}/lib/%{name}/plymouth-theme.backup
   lyra_theme='GRUB_THEME="%{_datadir}/grub/themes/Lyra-OS/theme.txt"'
 
-  if [ -f "$grub_default" ] && grep -Fqx "$lyra_theme" "$grub_default"; then
-    sed -i '\|^[[:space:]]*GRUB_THEME="/usr/share/grub/themes/Lyra-OS/theme.txt"$|d' "$grub_default"
+  # The preference file still exists during preun. Remove its include and
+  # rebuild even if openSUSE has rewritten the placeholder assignment.
+  lyra_grub_managed=false
+  if [ -f "$grub_default" ]; then
+    if grep -Fqx '[ ! -r /etc/default/grub.lyra-theme ] || . /etc/default/grub.lyra-theme' "$grub_default"; then
+      lyra_grub_managed=true
+      sed -i '\@^\[ ! -r /etc/default/grub\.lyra-theme \] || \. /etc/default/grub\.lyra-theme$@d' "$grub_default"
+    fi
+  fi
+  if [ -f "$grub_default" ] && { $lyra_grub_managed || grep -Fqx "$lyra_theme" "$grub_default"; }; then
+    sed -i '/^[[:space:]]*GRUB_THEME=/d' "$grub_default"
     if [ -s "$grub_backup" ]; then
       cat "$grub_backup" >> "$grub_default"
     fi
@@ -187,6 +203,7 @@ if [ "$1" -eq 0 ]; then
 fi
 
 %files
+%config(noreplace) %{_sysconfdir}/default/grub.lyra-theme
 %license LICENSE
 %doc README.md
 # Explicit parent-directory entries below are required because none of

@@ -219,8 +219,10 @@ fi
 if [[ -f /etc/default/grub ]]; then
   say info_confirming_grub
   sudo sed -i '/^[[:space:]]*GRUB_THEME=/d' /etc/default/grub
+  sudo sed -i '\@^\[ ! -r /etc/default/grub\.lyra-theme \] || \. /etc/default/grub\.lyra-theme$@d' /etc/default/grub
   printf '%s\n' \
-    'GRUB_THEME="/usr/share/grub/themes/Lyra-OS/theme.txt"' |
+    'GRUB_THEME="/usr/share/grub/themes/Lyra-OS/theme.txt"' \
+    '[ ! -r /etc/default/grub.lyra-theme ] || . /etc/default/grub.lyra-theme' |
     sudo tee -a /etc/default/grub >/dev/null
   sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 fi

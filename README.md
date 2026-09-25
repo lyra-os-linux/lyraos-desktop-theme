@@ -43,6 +43,17 @@ executa remoção de pacotes, migração de preferências ou alterações de boo
 
 ## Build e testes
 
+O RPM 1.9.4 mantém a preferência de GRUB em `/etc/default/grub.lyra-theme`,
+preservada como `%config(noreplace)`. Edite esse arquivo para escolher outro
+tema ou definir `GRUB_THEME=""`. O pacote deixa seu include por último em
+`/etc/default/grub` e uma atribuição anterior que o ativador do openSUSE pode
+reescrever sem anular a preferência. A remoção do RPM retira o include e tenta
+restaurar a atribuição guardada na primeira instalação.
+
+Isso cobre o ativador de branding testado, não a substituição integral da
+configuração por outro programa. O ensaio, os limites e a origem da fixture
+estão em [persistência do GRUB](docs/grub-branding-persistence.md).
+
 ```bash
 ./scripts/build.sh
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
