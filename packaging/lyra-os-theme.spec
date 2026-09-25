@@ -17,6 +17,7 @@ Requires:       lyra-os-icons
 Requires:       lyra-os-wallpapers
 Requires:       cantarell-fonts
 Requires:       dracut
+Requires:       plymouth-dracut
 Requires:       plymouth-plugin-two-step
 Requires:       plymouth-theme-spinner
 Requires(post): grub2
@@ -104,13 +105,17 @@ if [ -f "$grub_default" ]; then
   sed -i '\@^\[ ! -r /etc/default/grub\.lyra-theme \] || \. /etc/default/grub\.lyra-theme$@d' "$grub_default"
   printf '%s\n' "$lyra_theme" \
     '[ ! -r /etc/default/grub.lyra-theme ] || . /etc/default/grub.lyra-theme' >> "$grub_default"
-  %{_sbindir}/grub2-mkconfig -o /boot/grub2/grub.cfg || :
 fi
 
 if [ "$1" -eq 1 ]; then
   %{_sbindir}/plymouth-set-default-theme > "$plymouth_backup" || :
 fi
 %{_sbindir}/plymouth-set-default-theme -R Lyra-OS || :
+# A minimal installation may only now have its first initrd. Generate the
+# menu after Plymouth/dracut so those boot entries include it.
+if [ -f "$grub_default" ]; then
+  %{_sbindir}/grub2-mkconfig -o /boot/grub2/grub.cfg || :
+fi
 
 gdm_profile=%{_sysconfdir}/dconf/profile/gdm
 gdm_profile_marker=%{_localstatedir}/lib/%{name}/gdm-profile-created

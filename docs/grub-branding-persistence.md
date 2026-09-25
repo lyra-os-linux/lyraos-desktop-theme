@@ -41,3 +41,12 @@ Em regressão, interromper a promoção e corrigir pelo staging. Para a preferê
 local, selecionar outro tema no arquivo próprio e regenerar o GRUB pelo fluxo
 normal da distribuição. Remover o pacote também altera Plymouth/GDM; não é a
 ação recomendada para trocar apenas o tema do menu.
+
+## Dependência encontrada no ensaio nativo
+
+Na instalação com `--no-recommends`, o tema e `plymouth-scripts` não puxavam
+`plymouth-dracut`. O dracut registrava que não conseguia instalar a dependência
+Plymouth do módulo Lyra. O RPM agora exige esse subpacote explicitamente.
+Também gera o menu depois do initrd; em uma instalação mínima, a ordem anterior
+podia produzir o primeiro menu sem as linhas initrd. A reprodução e o ensaio
+do RPM ficam em `analysis/2026-09-25/grub-rpm-vm` no workspace de qualificação.
