@@ -80,4 +80,3 @@ sub update_default
   rename $grub2_default, "$grub2_default.old";
   rename "$grub2_default.tmp", $grub2_default;
 }
-

@@ -20,7 +20,8 @@ efetivo; estes testes não geram nem qualificam um menu inicializável.
 A fixture `tests/fixtures/opensuse-activate-theme` é uma cópia do arquivo
 `/usr/share/grub2/themes/openSUSE/activate-theme` do RPM oficial
 `grub2-branding-openSUSE-16.1.20260917-lp161.1.1.noarch`.
-SHA256: `befe2905707ed0255b37f309a509063f5f53a8a5dc00b9751535868b78d5fa64`.
+SHA256 do arquivo original: `befe2905707ed0255b37f309a509063f5f53a8a5dc00b9751535868b78d5fa64`.
+A cópia remove apenas a linha vazia final e não é executável.
 O teste troca seus três diretórios de operação por caminhos temporários antes
 de executar o Perl original. Não executá-la diretamente no host.
 
