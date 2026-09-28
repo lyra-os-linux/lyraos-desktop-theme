@@ -1,0 +1,30 @@
+/* Lyra native colors: GTK 3 Adwaita color overrides. */
+@define-color theme_bg_color #111925;
+@define-color theme_fg_color #e7edf6;
+@define-color theme_base_color #0b1018;
+@define-color theme_text_color #e7edf6;
+@define-color theme_selected_bg_color #2ac7fd;
+@define-color theme_selected_fg_color #0b1018;
+@define-color theme_unfocused_bg_color #111925;
+@define-color theme_unfocused_fg_color #aab6c8;
+@define-color theme_unfocused_base_color #0b1018;
+@define-color theme_unfocused_text_color #e7edf6;
+@define-color theme_unfocused_selected_bg_color #2ac7fd;
+@define-color theme_unfocused_selected_fg_color #0b1018;
+@define-color borders #354966;
+@define-color unfocused_borders #354966;
+@define-color theme_unfocused_view_bg_color #0b1018;
+window.background:not(.desktopwindow) { background-color: @theme_bg_color; color: @theme_fg_color; }
+headerbar, headerbar:backdrop { background-image: none; background-color: #111925; color: @theme_fg_color; }
+.view, textview text, entry { background-color: @theme_base_color; color: @theme_text_color; }
+.sidebar, .sidebar .view { background-color: #162131; color: @theme_fg_color; }
+menu, .menu, popover, dialog { background-color: #1c293b; color: @theme_fg_color; }
+button { background-image: none; background-color: #1c293b; color: @theme_fg_color; }
+button:hover { background-color: shade(#1c293b, 1.1); }
+button:active, button:checked, button.suggested-action, selection, row:selected, .view:selected { background-color: @theme_selected_bg_color; color: @theme_selected_fg_color; }
+button.destructive-action { background-color: #b4233a; color: white; }
+button:disabled { color: alpha(@theme_fg_color, 0.5); }
+headerbar button, headerbar button:backdrop { background-color: transparent; }
+headerbar button:hover { background-color: #1c293b; }
+
+window.desktopwindow { background-color: transparent; background-image: none; }

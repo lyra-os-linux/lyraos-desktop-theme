@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Refresh Lyra native colors
+Comment=Update an existing Lyra native color customization
+Exec=/usr/bin/lyra-native-colors --refresh
+OnlyShowIn=GNOME;
+NoDisplay=true
+X-GNOME-Autostart-enabled=true

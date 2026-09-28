@@ -3,3 +3,6 @@ pkg/
 .rpmbuild/
 src/*.tar.*
 *.pkg.tar.*
+
+__pycache__/
+*.py[cod]

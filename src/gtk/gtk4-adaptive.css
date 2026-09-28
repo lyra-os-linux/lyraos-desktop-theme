@@ -1,0 +1,34 @@
+/* Lyra native colors — qualified with GTK 4.18 / libadwaita 1.7.
+ * The native --standalone-color-oklab expression changes with StyleManager:
+ * min(l, .5) in light mode, max(l, .85) in dark mode. Applied to black it
+ * yields L=0 or L=.85. Relative Oklab colors interpolate the Lyra palettes
+ * without replacing Adwaita's named colors or writing CSS on mode changes.
+ * Requalify this contract when updating libadwaita. Never paint generic
+ * window backgrounds here: desktop windows must retain transparency.
+ */
+:root {
+  --window-bg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.978744896 + -0.767051239 * calc(l / 0.85)) calc(-0.000546455 + -0.004874587 * calc(l / 0.85)) calc(-0.005709256 + -0.020484690 * calc(l / 0.85)) / 1);
+  --view-bg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.999999993 + -0.828080995 * calc(l / 0.85)) calc(0.000000000 + -0.003334705 * calc(l / 0.85)) calc(0.000000037 + -0.018280218 * calc(l / 0.85)) / 1);
+  --view-fg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.211693657 + 0.732476892 * calc(l / 0.85)) calc(-0.005421041 + 0.002645261 * calc(l / 0.85)) calc(-0.026193946 + 0.012736393 * calc(l / 0.85)) / 1);
+  --headerbar-bg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.944170549 + -0.732476892 * calc(l / 0.85)) calc(-0.002775781 + -0.002645261 * calc(l / 0.85)) calc(-0.013457553 + -0.012736393 * calc(l / 0.85)) / 1);
+  --headerbar-fg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.211693657 + 0.732476892 * calc(l / 0.85)) calc(-0.005421041 + 0.002645261 * calc(l / 0.85)) calc(-0.026193946 + 0.012736393 * calc(l / 0.85)) / 1);
+  --sidebar-bg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.956830538 + -0.711231467 * calc(l / 0.85)) calc(-0.001844141 + -0.005526875 * calc(l / 0.85)) calc(-0.008933111 + -0.024790967 * calc(l / 0.85)) / 1);
+  --sidebar-fg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.211693657 + 0.732476892 * calc(l / 0.85)) calc(-0.005421041 + 0.002645261 * calc(l / 0.85)) calc(-0.026193946 + 0.012736393 * calc(l / 0.85)) / 1);
+  --secondary-sidebar-bg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.956830538 + -0.711231467 * calc(l / 0.85)) calc(-0.001844141 + -0.005526875 * calc(l / 0.85)) calc(-0.008933111 + -0.024790967 * calc(l / 0.85)) / 1);
+  --secondary-sidebar-fg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.211693657 + 0.732476892 * calc(l / 0.85)) calc(-0.005421041 + 0.002645261 * calc(l / 0.85)) calc(-0.026193946 + 0.012736393 * calc(l / 0.85)) / 1);
+  --card-bg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.999999993 + -0.722022974 * calc(l / 0.85)) calc(0.000000000 + -0.008783826 * calc(l / 0.85)) calc(0.000000037 + -0.037008112 * calc(l / 0.85)) / 1);
+  --card-fg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.211693657 + 0.732476892 * calc(l / 0.85)) calc(-0.005421041 + 0.002645261 * calc(l / 0.85)) calc(-0.026193946 + 0.012736393 * calc(l / 0.85)) / 1);
+  --dialog-bg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.999999993 + -0.722022974 * calc(l / 0.85)) calc(0.000000000 + -0.008783826 * calc(l / 0.85)) calc(0.000000037 + -0.037008112 * calc(l / 0.85)) / 1);
+  --dialog-fg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.211693657 + 0.732476892 * calc(l / 0.85)) calc(-0.005421041 + 0.002645261 * calc(l / 0.85)) calc(-0.026193946 + 0.012736393 * calc(l / 0.85)) / 1);
+  --popover-bg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.999999993 + -0.722022974 * calc(l / 0.85)) calc(0.000000000 + -0.008783826 * calc(l / 0.85)) calc(0.000000037 + -0.037008112 * calc(l / 0.85)) / 1);
+  --popover-fg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.211693657 + 0.732476892 * calc(l / 0.85)) calc(-0.005421041 + 0.002645261 * calc(l / 0.85)) calc(-0.026193946 + 0.012736393 * calc(l / 0.85)) / 1);
+  --thumbnail-bg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.999999993 + -0.722022974 * calc(l / 0.85)) calc(0.000000000 + -0.008783826 * calc(l / 0.85)) calc(0.000000037 + -0.037008112 * calc(l / 0.85)) / 1);
+  --thumbnail-fg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.211693657 + 0.732476892 * calc(l / 0.85)) calc(-0.005421041 + 0.002645261 * calc(l / 0.85)) calc(-0.026193946 + 0.012736393 * calc(l / 0.85)) / 1);
+  --accent-bg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.546149723 + 0.230234892 * calc(l / 0.85)) calc(-0.026671121 + -0.069356287 * calc(l / 0.85)) calc(-0.213548650 + 0.108071645 * calc(l / 0.85)) / 1);
+  --accent-fg-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.999999993 + -0.828080995 * calc(l / 0.85)) calc(0.000000000 + -0.003334705 * calc(l / 0.85)) calc(0.000000037 + -0.018280218 * calc(l / 0.85)) / 1);
+  --accent-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.546149723 + 0.230234892 * calc(l / 0.85)) calc(-0.026671121 + -0.069356287 * calc(l / 0.85)) calc(-0.213548650 + 0.108071645 * calc(l / 0.85)) / 1);
+  --headerbar-backdrop-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.978744896 + -0.767051239 * calc(l / 0.85)) calc(-0.000546455 + -0.004874587 * calc(l / 0.85)) calc(-0.005709256 + -0.020484690 * calc(l / 0.85)) / 1);
+  --headerbar-border-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.211693657 + 0.732476892 * calc(l / 0.85)) calc(-0.005421041 + 0.002645261 * calc(l / 0.85)) calc(-0.026193946 + 0.012736393 * calc(l / 0.85)) / 1);
+  --sidebar-backdrop-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.978744896 + -0.767051239 * calc(l / 0.85)) calc(-0.000546455 + -0.004874587 * calc(l / 0.85)) calc(-0.005709256 + -0.020484690 * calc(l / 0.85)) / 1);
+  --secondary-sidebar-backdrop-color: oklab(from oklab(from black var(--standalone-color-oklab)) calc(0.978744896 + -0.767051239 * calc(l / 0.85)) calc(-0.000546455 + -0.004874587 * calc(l / 0.85)) calc(-0.005709256 + -0.020484690 * calc(l / 0.85)) / 1);
+}

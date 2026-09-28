@@ -26,9 +26,11 @@ jobs:
           rpmbuild -bb --define '_topdir /tmp/lyra-branding-rpm' packaging/libreoffice-branding-Lyra.spec
       - name: Build boot theme RPM
         run: |
-          sed 's/^Version:.*/Version:        1.9.4/' packaging/opensuse/lyra-os-theme.spec > /tmp/lyra-branding-rpm/SPECS/lyra-os-theme.spec
+          tar --exclude=.git --exclude=dist -czf /tmp/lyra-branding-rpm/SOURCES/lyra-theme-src-1.10.0.tar.gz \
+            --transform='s,^,lyra-theme-src-1.10.0/,' .
+          sed 's/^Version:.*/Version:        1.10.0/' packaging/opensuse/lyra-os-theme.spec > /tmp/lyra-branding-rpm/SPECS/lyra-os-theme.spec
           rpmbuild -bb --define '_topdir /tmp/lyra-branding-rpm' /tmp/lyra-branding-rpm/SPECS/lyra-os-theme.spec
-          rpm -qp --configfiles /tmp/lyra-branding-rpm/RPMS/noarch/lyra-os-theme-1.9.4-*.rpm | grep -Fx /etc/default/grub.lyra-theme
+          rpm -qp --configfiles /tmp/lyra-branding-rpm/RPMS/noarch/lyra-os-theme-1.10.0-*.rpm | grep -Fx /etc/default/grub.lyra-theme
       - run: test ! -d dist/Lyra-OS && test ! -d dist/Lyra-OS-Light
       - run: |
           test -f dist/plymouth/Lyra-OS/watermark.png

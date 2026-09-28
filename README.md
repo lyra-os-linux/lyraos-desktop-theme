@@ -2,7 +2,11 @@
 
 O pacote `lyra-os-theme` mantém o visual de boot (GRUB e Plymouth), o logo do
 GDM e a integração dos ícones e wallpapers do Lyra. **GTK3, GTK4/libadwaita e
-GNOME Shell usam o padrão do GNOME**, sem folhas de estilo do Lyra.
+GNOME Shell usam o padrão do GNOME**, sem folhas de estilo do Lyra por padrão.
+
+Para aplicar opcionalmente a paleta Lyra às janelas nativas e ao GNOME
+Terminal na sessão atual, consulte [Cores das janelas](docs/native-window-colors.md).
+O comando inclui reversão e não modifica o padrão do RPM.
 
 No GNOME, a cor de destaque escolhida nas Configurações seleciona a variante
 correspondente dos ícones Lyra. O serviço da sessão acompanha mudanças de cor
