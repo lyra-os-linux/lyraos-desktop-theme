@@ -58,7 +58,7 @@ install -D -m 0755 src/defaults/lyra-native-colors \
   %{buildroot}%{_bindir}/lyra-native-colors
 install -D -m 0644 src/defaults/lyra-native-colors-refresh.desktop \
   %{buildroot}%{_sysconfdir}/xdg/autostart/lyra-native-colors-refresh.desktop
-install -D -m 0644 scripts/apply-native-colors.py \
+install -D -m 0755 scripts/apply-native-colors.py \
   %{buildroot}%{_datadir}/%{name}/native-colors/scripts/apply-native-colors.py
 install -d %{buildroot}%{_datadir}/%{name}/native-colors/src/gtk
 install -m 0644 src/gtk/*.css src/gtk/palette.json \
@@ -229,7 +229,7 @@ fi
 
 %files
 %{_bindir}/lyra-native-colors
-%{_sysconfdir}/xdg/autostart/lyra-native-colors-refresh.desktop
+%config(noreplace) %{_sysconfdir}/xdg/autostart/lyra-native-colors-refresh.desktop
 %{_datadir}/%{name}/native-colors/
 %config(noreplace) %{_sysconfdir}/default/grub.lyra-theme
 %license LICENSE
