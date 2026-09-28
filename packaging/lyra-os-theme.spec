@@ -1,7 +1,7 @@
 Name:           lyra-os-theme
-Version:        1.9.4
+Version:        1.10.0
 Release:        1%{?dist}
-Summary:        Boot branding and GNOME icon integration for Lyra OS
+Summary:        Lyra boot branding, icons and optional native GNOME colors
 License:        GPL-3.0-or-later
 URL:            https://github.com/lyra-os-linux/lyraos-desktop-theme
 Source0:        %{name}-%{version}.tar.xz
@@ -31,7 +31,9 @@ Recommends:     (lyra-nautilus-branding if nautilus)
 Suggests:       neofetch
 
 %description
-GNOME applications and Shell use the standard GNOME theme. Lyra icons follow
+Includes an optional, reversible native GNOME palette with automatic light/dark
+synchronization. Enable it per user with lyra-native-colors --install.
+GNOME Shell retains its standard theme. Lyra icons follow
 the system accent color. Includes the GDM login logo and
 the Lyra OS boot menu theme for
 GRUB 2, a matching Plymouth boot splash theme, plus Fastfetch and Neofetch
@@ -44,6 +46,16 @@ configs with a Lyra ascii logo.
 ./scripts/build.sh
 
 %install
+install -D -m 0755 src/defaults/lyra-native-colors \
+  %{buildroot}%{_bindir}/lyra-native-colors
+install -D -m 0644 src/defaults/lyra-native-colors-refresh.desktop \
+  %{buildroot}%{_sysconfdir}/xdg/autostart/lyra-native-colors-refresh.desktop
+install -D -m 0644 scripts/apply-native-colors.py \
+  %{buildroot}%{_datadir}/%{name}/native-colors/scripts/apply-native-colors.py
+install -d %{buildroot}%{_datadir}/%{name}/native-colors/src/gtk
+install -m 0644 src/gtk/*.css src/gtk/palette.json \
+  %{buildroot}%{_datadir}/%{name}/native-colors/src/gtk/
+
 install -d %{buildroot}%{_datadir}/glib-2.0/schemas
 install -m 0644 src/defaults/99-lyra-os.gschema.override \
   %{buildroot}%{_datadir}/glib-2.0/schemas/
@@ -208,6 +220,9 @@ if [ "$1" -eq 0 ]; then
 fi
 
 %files
+%{_bindir}/lyra-native-colors
+%{_sysconfdir}/xdg/autostart/lyra-native-colors-refresh.desktop
+%{_datadir}/%{name}/native-colors/
 %config(noreplace) %{_sysconfdir}/default/grub.lyra-theme
 %license LICENSE
 %doc README.md
