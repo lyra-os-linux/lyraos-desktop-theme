@@ -157,6 +157,55 @@ def apply(changes, config, mode):
             theme = ('@import url("resource:///org/gtk/libgtk/theme/Adwaita/' + stock + '");\n').encode()
             theme += (ASSETS / f'gtk3-{selected}.css').read_bytes()
             changes.file(data / 'themes' / name / 'gtk-3.0' / filename, theme)
+        # GNOME Shell loads the selected User Themes stylesheet as an
+        # application stylesheet, on top of its own mode-specific defaults.
+        # Keep these rules limited to Shell modal dialogs and use separate
+        # theme names so the existing color-scheme watcher can switch live.
+        shell_name = 'Lyra-Dialogs-' + variant.capitalize()
+        shell_dir = data / 'themes' / shell_name / 'gnome-shell'
+        colors = palette['colors'][variant]
+        css = f'''/* Lyra dialog palette; scoped to GNOME Shell modal dialogs. */
+.modal-dialog {{
+  background-color: {colors['window']};
+  color: {colors['fg']};
+  border: 1px solid {colors['border']};
+}}
+
+.modal-dialog .message-dialog-title,
+.modal-dialog .message-dialog-description,
+.modal-dialog .polkit-dialog-user-label,
+.modal-dialog .prompt-dialog-info-label {{
+  color: {colors['fg']};
+}}
+
+.modal-dialog .prompt-dialog-error-label {{
+  color: {('#ff7b86' if variant == 'dark' else '#b4233a')};
+}}
+
+.modal-dialog .prompt-dialog-password-entry {{
+  background-color: {colors['view']};
+  color: {colors['fg']};
+  border-color: {colors['border']};
+  selection-background-color: {colors['accent']};
+  selected-color: {colors['accent_fg']};
+}}
+
+.modal-dialog .modal-dialog-button {{
+  background-image: none;
+  background-color: {colors['card']};
+  color: {colors['fg']};
+  border-color: {colors['border']};
+}}
+
+.modal-dialog .modal-dialog-button:hover,
+.modal-dialog .modal-dialog-button:focus,
+.modal-dialog .modal-dialog-button:active {{
+  background-image: none;
+  background-color: {colors['accent']};
+  color: {colors['accent_fg']};
+}}
+'''.encode()
+        changes.file(shell_dir / 'gnome-shell.css', css)
     # Refuse an old fixed GTK 3 override: undo must migrate it first, otherwise
     # user CSS would still override the native theme and the desktop window.
     old_gtk3 = config / 'gtk-3.0/gtk.css'
@@ -171,6 +220,10 @@ def apply(changes, config, mode):
     changes.file(target, (ASSETS / 'gtk4-adaptive.css').read_bytes())
     changes.file(css, IMPORT + old.replace(IMPORT, b''))
     changes.setting(interface, 'gtk-theme', GLib.Variant('s', 'Lyra-Native-dark' if mode == 'dark' else 'Lyra-Native'))
+    user_theme = settings('org.gnome.shell.extensions.user-theme')
+    if user_theme:
+        shell_name = 'Lyra-Dialogs-' + mode.capitalize()
+        changes.setting(user_theme, 'name', GLib.Variant('s', shell_name), preserve_user=True)
     console = settings('org.gnome.Console')
     if console:
         changes.setting(console, 'theme', GLib.Variant('s', 'auto'), preserve_user=True)

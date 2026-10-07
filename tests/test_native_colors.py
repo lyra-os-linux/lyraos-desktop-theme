@@ -13,6 +13,70 @@ spec.loader.exec_module(colors)
 
 
 class NativeColorsTests(unittest.TestCase):
+    def test_shell_dialog_palette_switches_and_preserves_user_theme(self):
+        class FakeSettings:
+            def __init__(self, schema, values):
+                self.props = SimpleNamespace(schema_id=schema, path='/')
+                self.values = values
+
+            def get_string(self, key):
+                return self.values[key].get_string()
+
+            def get_value(self, key):
+                return self.values[key]
+
+            def get_user_value(self, key):
+                return None
+
+            def is_writable(self, key):
+                return True
+
+            def set_value(self, key, value):
+                self.values[key] = value
+                return True
+
+            def reset(self, key):
+                self.values[key] = variant('s', 'Adwaita' if key == 'gtk-theme' else '')
+
+        variant = colors.GLib.Variant
+        interface = FakeSettings('org.gnome.desktop.interface', {
+            'color-scheme': variant('s', 'default'),
+            'gtk-theme': variant('s', 'Adwaita'),
+        })
+        shell = FakeSettings('org.gnome.shell.extensions.user-theme', {
+            'name': variant('s', 'PreviousTheme'),
+        })
+        by_schema = {
+            'org.gnome.desktop.interface': interface,
+            'org.gnome.shell.extensions.user-theme': shell,
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            data = root / 'data'
+            config = root / 'config'
+            change = colors.Changes(root / 'state')
+            with patch.object(colors, 'settings', side_effect=lambda schema, path=None: by_schema.get(schema)), \
+                 patch.object(colors.GLib, 'get_user_data_dir', return_value=str(data)), \
+                 patch.object(colors.Gio.Settings, 'sync'):
+                self.assertEqual(colors.apply(change, config, 'auto'), 'light')
+                self.assertEqual(shell.get_string('name'), 'Lyra-Dialogs-Light')
+                light = (data / 'themes/Lyra-Dialogs-Light/gnome-shell/gnome-shell.css').read_text()
+                self.assertIn('.modal-dialog', light)
+                self.assertIn('.prompt-dialog-password-entry', light)
+                self.assertNotIn('#panel', light)
+
+                interface.values['color-scheme'] = variant('s', 'prefer-dark')
+                self.assertEqual(colors.apply(change, config, 'auto'), 'dark')
+                self.assertEqual(shell.get_string('name'), 'Lyra-Dialogs-Dark')
+                dark = (data / 'themes/Lyra-Dialogs-Dark/gnome-shell/gnome-shell.css').read_text()
+                self.assertNotEqual(light, dark)
+
+                shell.values['name'] = variant('s', 'CustomTheme')
+                colors.apply(change, config, 'auto')
+                self.assertEqual(shell.get_string('name'), 'CustomTheme')
+                self.assertTrue(change.undo())
+                self.assertEqual(shell.get_string('name'), 'CustomTheme')
+
     def test_reapply_keeps_original_and_undo_preserves_later_edits(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
