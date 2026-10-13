@@ -7,7 +7,7 @@
 # idêntico.
 
 Name:           lyra-os-theme
-Version:        0.0.0
+Version:        1.10.1
 Release:        1%{?dist}
 Summary:        Lyra boot branding, icons and optional native GNOME colors
 License:        GPL-3.0-or-later
@@ -41,7 +41,8 @@ Suggests:       neofetch
 %description
 Includes an optional, reversible native GNOME palette with automatic light/dark
 synchronization. Enable it per user with lyra-native-colors --install.
-GNOME Shell retains its standard theme. Lyra icons follow
+GNOME Shell uses Lyra colors in modal dialogs when User Themes is available.
+Lyra icons follow
 the system accent color. Includes the GDM login logo and
 the Lyra OS boot menu theme for
 GRUB 2, a matching Plymouth boot splash theme, plus Fastfetch and Neofetch

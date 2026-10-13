@@ -20,6 +20,12 @@ Fontes, comandos, histórico e demais perfis não são alterados. Console e
 Terminal são inicialmente configurados para seguir o sistema; uma alteração
 posterior nessas preferências próprias é preservada.
 
+Quando a extensão GNOME User Themes está disponível, o mesmo serviço seleciona
+uma folha de estilo Lyra clara ou escura para os diálogos modais do GNOME Shell,
+incluindo prompts do polkit. O CSS não altera painel, menus nem a lógica de
+autenticação. A preferência de tema Shell anterior é restaurada com `--undo`;
+se o usuário escolher outro tema depois da ativação, essa escolha é preservada.
+
 É preciso reabrir **uma vez** os aplicativos que ainda carreguem o antigo CSS
 fixo. Depois disso, a alternância acontece com as janelas abertas. O auxiliar
 não encerra aplicativos nem sessões de terminal.
