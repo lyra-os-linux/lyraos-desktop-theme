@@ -21,9 +21,16 @@ jobs:
           rpmbuild -bb --define '_topdir /tmp/lyra-branding-rpm' packaging/lyra-nautilus-branding.spec
       - name: Build LibreOffice branding RPM
         run: |
-          tar --exclude=.git --exclude=dist -czf /tmp/lyra-branding-rpm/SOURCES/libreoffice-branding-Lyra-1.0.0.tar.gz \
-            --transform='s,^,libreoffice-branding-Lyra-1.0.0/,' .
+          tar --exclude=.git --exclude=dist -czf /tmp/lyra-branding-rpm/SOURCES/libreoffice-branding-Lyra-1.0.1.tar.gz \
+            --transform='s,^,libreoffice-branding-Lyra-1.0.1/,' .
           rpmbuild -bb --define '_topdir /tmp/lyra-branding-rpm' packaging/libreoffice-branding-Lyra.spec
+          # Every branding path that the openSUSE libreoffice package links to
+          # must be provided, otherwise its symlinks dangle (rpm -V libreoffice).
+          rpm -qpl /tmp/lyra-branding-rpm/RPMS/noarch/libreoffice-branding-Lyra-1.0.1-*.rpm > /tmp/lo-branding-files.txt
+          for f in program/intro.png program/intro-highres.png program/flat_logo.svg program/sofficerc \
+                   program/shell/about.svg program/shell/logo.svg program/shell/logo_inverted.svg; do
+            grep -Fqx "/usr/share/libreoffice/$f" /tmp/lo-branding-files.txt
+          done
       - name: Build boot theme RPM
         run: |
           tar --exclude=.git --exclude=dist -czf /tmp/lyra-branding-rpm/SOURCES/lyra-theme-src-1.10.0.tar.gz \
