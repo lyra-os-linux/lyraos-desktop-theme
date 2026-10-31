@@ -2,7 +2,7 @@ name: validate
 on: [push, pull_request]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container: opensuse/tumbleweed:latest
     steps:
       - run: zypper --non-interactive install git python3 python3-gobject rsvg-convert cantarell-fonts gcc gtk4-devel libadwaita-devel rpm-build perl
