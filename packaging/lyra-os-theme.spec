@@ -1,5 +1,5 @@
 Name:           lyra-os-theme
-Version:        1.10.1
+Version:        1.10.2
 Release:        1%{?dist}
 Summary:        Lyra boot branding, icons and optional native GNOME colors
 License:        GPL-3.0-or-later
