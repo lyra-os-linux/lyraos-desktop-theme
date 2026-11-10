@@ -210,8 +210,10 @@ if [ "$1" -eq 0 ]; then
   gdm_profile_marker=%{_localstatedir}/lib/%{name}/gdm-profile-created
 
   rm -f %{_sysconfdir}/dconf/db/gdm.d/00-lyra-os
-  if [ -f "$gdm_profile_marker" ]; then
-    rm -f "$gdm_profile" "$gdm_profile_marker"
+  # O install-rpm.sh antigo marcava o perfil em /etc/dconf/profile/gdm.lyra-theme-created.
+  legacy_gdm_marker=%{_sysconfdir}/dconf/profile/gdm.lyra-theme-created
+  if [ -f "$gdm_profile_marker" ] || [ -f "$legacy_gdm_marker" ]; then
+    rm -f "$gdm_profile" "$gdm_profile_marker" "$legacy_gdm_marker"
   fi
   %{_bindir}/dconf update || :
 

@@ -240,7 +240,10 @@ if command -v dconf >/dev/null 2>&1; then
   fi
   if [[ ! -f /etc/dconf/profile/gdm ]]; then
     printf 'user-db:user\nsystem-db:gdm\n' | sudo tee /etc/dconf/profile/gdm >/dev/null
-    sudo touch /etc/dconf/profile/gdm.lyra-theme-created
+    # Mesmo marcador do %post do RPM: assim o %preun remove o perfil também
+    # quando foi este script que o criou (lyraos-desktop-theme#27).
+    sudo install -d -m 0755 /var/lib/lyra-os-theme
+    sudo touch /var/lib/lyra-os-theme/gdm-profile-created
   fi
   sudo install -d /etc/dconf/db/gdm.d
   sudo rm -f /etc/dconf/db/gdm.d/00-lyra-enterprise
