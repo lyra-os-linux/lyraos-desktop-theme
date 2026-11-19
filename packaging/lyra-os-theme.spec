@@ -1,5 +1,5 @@
 Name:           lyra-os-theme
-Version:        1.10.2
+Version:        1.11.0
 Release:        1%{?dist}
 Summary:        Lyra boot branding, icons and optional native GNOME colors
 License:        GPL-3.0-or-later
@@ -38,7 +38,8 @@ Lyra icons follow
 the system accent color. Includes the GDM login logo and
 the Lyra OS boot menu theme for
 GRUB 2, a matching Plymouth boot splash theme, plus Fastfetch and Neofetch
-configs with a Lyra ascii logo.
+configs with a Lyra ascii logo; terminals with the kitty graphics
+protocol show the Euri mascot in Fastfetch instead.
 
 %prep
 %autosetup
@@ -86,7 +87,12 @@ install -m 0644 dist/neofetch/config.conf \
 
 install -d %{buildroot}%{_datadir}/%{name}/fastfetch
 install -m 0644 dist/fastfetch/config.jsonc dist/fastfetch/logo.txt \
+  dist/fastfetch/euri.jsonc dist/fastfetch/euri.png \
   %{buildroot}%{_datadir}/%{name}/fastfetch/
+install -D -m 0644 dist/shell/lyra-fastfetch.sh \
+  %{buildroot}%{_sysconfdir}/profile.d/lyra-fastfetch.sh
+install -D -m 0644 dist/shell/lyra-fastfetch.fish \
+  %{buildroot}%{_datadir}/fish/vendor_conf.d/lyra-fastfetch.fish
 
 install -d %{buildroot}%{_datadir}/%{name}/gdm
 install -m 0644 dist/gdm/logo.svg \
@@ -251,6 +257,12 @@ fi
 %dir %{_datadir}/%{name}/fastfetch
 %{_datadir}/%{name}/fastfetch/config.jsonc
 %{_datadir}/%{name}/fastfetch/logo.txt
+%{_datadir}/%{name}/fastfetch/euri.jsonc
+%{_datadir}/%{name}/fastfetch/euri.png
+%config %{_sysconfdir}/profile.d/lyra-fastfetch.sh
+%dir %{_datadir}/fish
+%dir %{_datadir}/fish/vendor_conf.d
+%{_datadir}/fish/vendor_conf.d/lyra-fastfetch.fish
 %dir %{_datadir}/%{name}/gdm
 %{_datadir}/%{name}/gdm/logo.svg
 %dir %{_sysconfdir}/skel/.config

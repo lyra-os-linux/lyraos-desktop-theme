@@ -14,12 +14,15 @@ export -f svg_to_png
 
 rm -rf "$dist"
 mkdir -p "$dist/grub/Lyra-OS"
-mkdir -p "$dist/neofetch" "$dist/fastfetch" "$dist/gdm"
+mkdir -p "$dist/neofetch" "$dist/fastfetch" "$dist/gdm" "$dist/shell"
 
 "$root/scripts/build-plymouth.sh" "$dist"
 cp "$root/src/neofetch/config.conf" "$dist/neofetch/"
 cp "$root/src/fastfetch/config.jsonc" "$root/src/fastfetch/logo.txt" \
+  "$root/src/fastfetch/euri.jsonc" "$root/src/fastfetch/euri.png" \
   "$dist/fastfetch/"
+# Sourced by bash and fish at startup, not executed.
+cp "$root"/src/shell/lyra-fastfetch.* "$dist/shell/"
 cp "$root/src/gdm/logo.svg" "$dist/gdm/"
 
 cp "$root/src/grub/theme.txt" "$dist/grub/Lyra-OS/"
